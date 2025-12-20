@@ -49,31 +49,28 @@ public partial class MainViewModel(INetworkService networkService, IProxyService
         }
 
         var targetProxy = $"{HostIpAddress}:{DefaultPort}";
-        var success = _proxyService.SetSystemProxy(targetProxy);
+        var result = _proxyService.SetSystemProxy(targetProxy);
 
-        if (success)
+        // 直接显示来自底层的准确消息
+        StatusMessage = result.Message;
+
+        if (result.IsSuccess)
         {
-            StatusMessage = $"成功：已设置代理为 {targetProxy}";
-            UpdateProxyDisplay(); // 立即刷新显示
-        }
-        else
-        {
-            StatusMessage = "错误：设置代理失败，请检查权限";
+            UpdateProxyDisplay();
         }
     }
 
     [RelayCommand]
     private void OnDisableProxy()
     {
-        var success = _proxyService.DisableSystemProxy();
-        if (success)
+        var result = _proxyService.DisableSystemProxy();
+
+        // 直接显示来自底层的准确消息
+        StatusMessage = result.Message;
+
+        if (result.IsSuccess)
         {
-            StatusMessage = "成功：系统代理已禁用";
             UpdateProxyDisplay();
-        }
-        else
-        {
-            StatusMessage = "错误：禁用代理失败";
         }
     }
 

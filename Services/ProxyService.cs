@@ -1,4 +1,7 @@
-﻿using Microsoft.Win32;
+﻿using System.Runtime.InteropServices;
+using System.Security;
+
+using Microsoft.Win32;
 
 using HyperVProxyManager.Core;
 using HyperVProxyManager.Models;
@@ -8,8 +11,8 @@ namespace HyperVProxyManager.Services;
 public interface IProxyService
 {
     ProxyState GetSystemProxy();
-    bool SetSystemProxy(string address);
-    bool DisableSystemProxy();
+    OperationResult SetSystemProxy(string address);
+    OperationResult DisableSystemProxy();
 }
 
 public class ProxyService : IProxyService
@@ -38,38 +41,50 @@ public class ProxyService : IProxyService
         }
     }
 
-    public bool SetSystemProxy(string address) => ApplyRegistrySettings(true, address);
+    public OperationResult SetSystemProxy(string address) => ApplyRegistrySettings(true, address);
 
-    public bool DisableSystemProxy() => ApplyRegistrySettings(false, "");
+    public OperationResult DisableSystemProxy() => ApplyRegistrySettings(false, "");
 
-    private static bool ApplyRegistrySettings(bool enable, string address)
+    private static OperationResult ApplyRegistrySettings(bool enable, string address)
     {
         try
         {
             using var key = Registry.CurrentUser.CreateSubKey(RegistryKeyPath);
-            if (key == null) return false;
+            if (key == null)
+                return new OperationResult(false, "无法创建或打开注册表项");
 
             key.SetValue("ProxyEnable", enable ? 1 : 0, RegistryValueKind.DWord);
+            key.SetValue("ProxyServer", enable ? address : "", RegistryValueKind.String);
 
-            // 仅在启用时设置地址，禁用时清空以保持整洁
-            if (enable)
+            // 刷新系统设置并收取返回值
+            int result1 = NativeMethods.InternetSetOption(IntPtr.Zero, NativeMethods.INTERNET_OPTION_SETTINGS_CHANGED, IntPtr.Zero, 0);
+            int result2 = NativeMethods.InternetSetOption(IntPtr.Zero, NativeMethods.INTERNET_OPTION_REFRESH, IntPtr.Zero, 0);
+
+            if (result1 == 0 || result2 == 0)
             {
-                key.SetValue("ProxyServer", address, RegistryValueKind.String);
-            }
-            else
-            {
-                key.SetValue("ProxyServer", "", RegistryValueKind.String);
+                // 获取具体的 Win32 错误代码
+                var errorCode = Marshal.GetLastPInvokeError();
+                return new OperationResult(false, $"警告：Win32 操作异常，最后返回值 - {errorCode}");
             }
 
-            // 刷新系统设置
-            NativeMethods.InternetSetOption(IntPtr.Zero, NativeMethods.INTERNET_OPTION_SETTINGS_CHANGED, IntPtr.Zero, 0);
-            NativeMethods.InternetSetOption(IntPtr.Zero, NativeMethods.INTERNET_OPTION_REFRESH, IntPtr.Zero, 0);
+            string successMsg = enable
+                ? $"操作完成：设置代理为 {address}"
+                : "操作完成：禁用系统代理";
 
-            return true;
+            return new OperationResult(true, successMsg);
         }
-        catch
+        catch (UnauthorizedAccessException)
         {
-            return false;
+            return new OperationResult(false, "错误：权限不足。请尝试以管理员身份运行程序。");
+        }
+        catch (SecurityException)
+        {
+            return new OperationResult(false, "错误：安全异常，无法访问注册表。");
+        }
+        catch (Exception ex)
+        {
+            // 捕获所有其他未知错误，并包含异常信息以便调试
+            return new OperationResult(false, $"错误：未预期的异常 - {ex.Message}");
         }
     }
 }
