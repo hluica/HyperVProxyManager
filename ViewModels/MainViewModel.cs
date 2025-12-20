@@ -29,10 +29,7 @@ public partial class MainViewModel(INetworkService networkService, IProxyService
     private bool _canQuickSet = false;
 
     [RelayCommand]
-    private async Task OnLoaded()
-    {
-        await RefreshDataAsync();
-    }
+    private async Task OnLoaded() => await RefreshDataAsync();
 
     [RelayCommand]
     private async Task OnRefresh()

@@ -38,15 +38,9 @@ public class ProxyService : IProxyService
         }
     }
 
-    public bool SetSystemProxy(string address)
-    {
-        return ApplyRegistrySettings(true, address);
-    }
+    public bool SetSystemProxy(string address) => ApplyRegistrySettings(true, address);
 
-    public bool DisableSystemProxy()
-    {
-        return ApplyRegistrySettings(false, "");
-    }
+    public bool DisableSystemProxy() => ApplyRegistrySettings(false, "");
 
     private static bool ApplyRegistrySettings(bool enable, string address)
     {

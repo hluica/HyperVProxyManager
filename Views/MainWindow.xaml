@@ -29,12 +29,12 @@
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
             <!-- 0: TitleBar -->
-            <RowDefinition Height="*"/>
-            <!-- 1: Content -->
             <RowDefinition Height="Auto"/>
+            <!-- 1: Content -->
+            <RowDefinition Height="*"/>
             <!-- 2: StatusBar -->
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
         <!-- 标题栏 -->
@@ -45,19 +45,18 @@
         <Grid Grid.Row="1"
               Margin="24">
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
                 <!-- 0: Info Cards -->
-                <RowDefinition Height="24"/>
-                <!-- 1: Spacer (Vertical) -->
                 <RowDefinition Height="Auto"/>
+                <!-- 1: Spacer (Vertical) -->
+                <RowDefinition Height="24"/>
                 <!-- 2: Action Buttons -->
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
             <!-- 定义统一的列结构：左右各占一半，中间留出统一的 16px 间隙 -->
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="16"/>
-                <!-- 统一的中轴间距 -->
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
@@ -117,15 +116,15 @@
                                 VerticalAlignment="Center">
                             <Border.Style>
                                 <Style TargetType="Border">
+                                    <!-- Default: Grey -->
                                     <Setter Property="Background"
                                             Value="#737373"/>
-                                    <!-- Default: Grey -->
                                     <Style.Triggers>
                                         <DataTrigger Binding="{Binding IsProxyEnabled}"
                                                      Value="True">
+                                            <!-- Active: Green -->
                                             <Setter Property="Background"
                                                     Value="#00CC6A"/>
-                                            <!-- Active: Green -->
                                         </DataTrigger>
                                     </Style.Triggers>
                                 </Style>
@@ -147,7 +146,7 @@
             </ui:Card>
 
             <!-- ===第二行：操作按钮 (Row 2)=== -->
-            <!-- 左侧：快速设置大按钮 (占据左半边，与上方卡片完美对齐) -->
+            <!-- 左侧：快速设置大按钮 (占据左半边，与上方卡片对齐) -->
             <ui:Button Grid.Row="2"
                        Grid.Column="0"
                        Command="{Binding QuickSetCommand}"
@@ -160,9 +159,11 @@
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
+
                     <ui:SymbolIcon Grid.Column="0"
                                    Symbol="Rocket24"
                                    FontSize="18"/>
+
                     <TextBlock Grid.Column="1"
                                Text="应用宿主机 IP (7890)"
                                VerticalAlignment="Center"
@@ -193,9 +194,11 @@
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
+
                         <ui:SymbolIcon Grid.Column="0"
                                        Symbol="ArrowCounterclockwise24"
                                        FontSize="18"/>
+
                         <TextBlock Grid.Column="1"
                                    Text="刷新"
                                    VerticalAlignment="Center"
@@ -214,9 +217,11 @@
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
+
                         <ui:SymbolIcon Grid.Column="0"
                                        Symbol="DismissCircle24"
                                        FontSize="18"/>
+
                         <TextBlock Grid.Column="1"
                                    Text="禁用"
                                    VerticalAlignment="Center"
@@ -236,6 +241,5 @@
                            FontSize="12"/>
             </StatusBarItem>
         </StatusBar>
-
     </Grid>
 </ui:FluentWindow>
