@@ -27,9 +27,7 @@ public partial class MainWindow : FluentWindow
 
     // 事件处理器：当系统或应用主题发生变化时触发
     private void OnThemeChanged(ApplicationTheme currentTheme, System.Windows.Media.Color systemAccent)
-    {
-        UpdateWindowIcon(currentTheme);
-    }
+        => UpdateWindowIcon(currentTheme);
 
     // 核心逻辑：根据主题加载对应的嵌入资源图标
     private void UpdateWindowIcon(ApplicationTheme theme)

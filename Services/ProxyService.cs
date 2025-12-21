@@ -24,7 +24,8 @@ public class ProxyService : IProxyService
         try
         {
             using var key = Registry.CurrentUser.OpenSubKey(RegistryKeyPath, false);
-            if (key == null) return ProxyState.Empty;
+            if (key == null)
+                return ProxyState.Empty;
 
             var enabled = (int?)key.GetValue("ProxyEnable", 0) ?? 0;
             var server = (string?)key.GetValue("ProxyServer", "") ?? "";
@@ -41,9 +42,11 @@ public class ProxyService : IProxyService
         }
     }
 
-    public OperationResult SetSystemProxy(string address) => ApplyRegistrySettings(true, address);
+    public OperationResult SetSystemProxy(string address)
+        => ApplyRegistrySettings(true, address);
 
-    public OperationResult DisableSystemProxy() => ApplyRegistrySettings(false, "");
+    public OperationResult DisableSystemProxy()
+        => ApplyRegistrySettings(false, "");
 
     private static OperationResult ApplyRegistrySettings(bool enable, string address)
     {

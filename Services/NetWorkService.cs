@@ -10,9 +10,8 @@ public interface INetworkService
 public class NetworkService : INetworkService
 {
     public async Task<string?> GetHyperVHostIpAsync()
-    {
         // 使用 Task.Run 将网络扫描放入后台线程，防止阻塞 UI
-        return await Task.Run(() =>
+        => await Task.Run(() =>
         {
             try
             {
@@ -40,5 +39,4 @@ public class NetworkService : INetworkService
                 return null;
             }
         });
-    }
 }
