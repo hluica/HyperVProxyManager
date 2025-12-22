@@ -7,6 +7,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
 
+    <version>1.1.1</version>
+
     <ApplicationIcon>Assets\AppIcon_Light.ico</ApplicationIcon>
 
     <PublishSingleFile>true</PublishSingleFile>
