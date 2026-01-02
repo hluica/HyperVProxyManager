@@ -1,4 +1,5 @@
-﻿using System.Windows.Media.Imaging;
+﻿using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 using HyperVProxyManager.ViewModels;
 
@@ -26,22 +27,15 @@ public partial class MainWindow : FluentWindow
     }
 
     // 事件处理器：当系统或应用主题发生变化时触发
-    private void OnThemeChanged(ApplicationTheme currentTheme, System.Windows.Media.Color systemAccent)
+    private void OnThemeChanged(ApplicationTheme currentTheme, Color systemAccent)
         => UpdateWindowIcon(currentTheme);
 
     // 核心逻辑：根据主题加载对应的嵌入资源图标
     private void UpdateWindowIcon(ApplicationTheme theme)
     {
-        string iconFileName;
-
-        if (theme == ApplicationTheme.Dark)
-        {
-            iconFileName = "AppIcon_Dark.ico";
-        }
-        else
-        {
-            iconFileName = "AppIcon_Light.ico";
-        }
+        string iconFileName = theme == ApplicationTheme.Dark
+            ? "AppIcon_Dark.ico"
+            : "AppIcon_Light.ico";
 
         // 使用 Pack URI 路径读取嵌入资源
         try

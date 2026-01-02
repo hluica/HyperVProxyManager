@@ -1,10 +1,10 @@
 ﻿using System.Windows;
 
-using Microsoft.Extensions.DependencyInjection;
-
 using HyperVProxyManager.Services;
 using HyperVProxyManager.ViewModels;
 using HyperVProxyManager.Views;
+
+using Microsoft.Extensions.DependencyInjection;
 
 namespace HyperVProxyManager;
 

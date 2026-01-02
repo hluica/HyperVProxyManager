@@ -49,16 +49,14 @@ public partial class MainViewModel(INetworkService networkService, IProxyService
             return;
         }
 
-        var targetProxy = $"{HostIpAddress}:{DefaultPort}";
+        string targetProxy = $"{HostIpAddress}:{DefaultPort}";
         var result = _proxyService.SetSystemProxy(targetProxy);
 
         // 直接显示来自底层的准确消息
         StatusMessage = result.Message;
 
         if (result.IsSuccess)
-        {
             UpdateProxyDisplay();
-        }
     }
 
     [RelayCommand]
@@ -70,15 +68,13 @@ public partial class MainViewModel(INetworkService networkService, IProxyService
         StatusMessage = result.Message;
 
         if (result.IsSuccess)
-        {
             UpdateProxyDisplay();
-        }
     }
 
     private async Task RefreshDataAsync()
     {
         // 1. 获取宿主机 IP
-        var ip = await _networkService.GetHyperVHostIpAsync();
+        string? ip = await _networkService.GetHyperVHostIpAsync();
         if (!string.IsNullOrEmpty(ip))
         {
             HostIpAddress = ip;
@@ -98,6 +94,8 @@ public partial class MainViewModel(INetworkService networkService, IProxyService
     {
         var state = _proxyService.GetSystemProxy();
         IsProxyEnabled = state.IsEnabled;
-        CurrentProxyAddress = state.IsEnabled ? state.ServerAddress : "未启用";
+        CurrentProxyAddress = state.IsEnabled
+            ? state.ServerAddress
+            : "未启用";
     }
 }

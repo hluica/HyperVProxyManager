@@ -17,20 +17,18 @@ public class NetworkService : INetworkService
             {
                 var hyperVInterface = NetworkInterface.GetAllNetworkInterfaces()
                     .FirstOrDefault(ni =>
-                        ni.NetworkInterfaceType != NetworkInterfaceType.Loopback &&
-                        ni.OperationalStatus == OperationalStatus.Up &&
-                        // 匹配常见的 Hyper-V 虚拟网卡描述
-                        (ni.Description.Contains("Microsoft Hyper-V Network Adapter") ||
-                            ni.Description.Contains("Hyper-V Virtual Ethernet Adapter"))
-                    );
+                        ni.NetworkInterfaceType != NetworkInterfaceType.Loopback
+                        && ni.OperationalStatus == OperationalStatus.Up
+                        && (ni.Description.Contains("Microsoft Hyper-V Network Adapter")
+                            || ni.Description.Contains("Hyper-V Virtual Ethernet Adapter")));
 
-                if (hyperVInterface == null) return null;
+                if (hyperVInterface == null)
+                    return null;
 
                 var ipProperties = hyperVInterface.GetIPProperties();
                 var gateway = ipProperties?.GatewayAddresses
                     .FirstOrDefault(ga =>
-                        ga.Address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork
-                    );
+                        ga.Address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork);
 
                 return gateway?.Address.ToString();
             }

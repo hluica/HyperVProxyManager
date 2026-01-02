@@ -1,10 +1,10 @@
 ﻿using System.Runtime.InteropServices;
 using System.Security;
 
-using Microsoft.Win32;
-
 using HyperVProxyManager.Core;
 using HyperVProxyManager.Models;
+
+using Microsoft.Win32;
 
 namespace HyperVProxyManager.Services;
 
@@ -27,8 +27,8 @@ public class ProxyService : IProxyService
             if (key == null)
                 return ProxyState.Empty;
 
-            var enabled = (int?)key.GetValue("ProxyEnable", 0) ?? 0;
-            var server = (string?)key.GetValue("ProxyServer", "") ?? "";
+            int enabled = (int?)key.GetValue("ProxyEnable", 0) ?? 0;
+            string server = (string?)key.GetValue("ProxyServer", "") ?? "";
 
             return new ProxyState
             {
@@ -66,7 +66,7 @@ public class ProxyService : IProxyService
             if (result1 == 0 || result2 == 0)
             {
                 // 获取具体的 Win32 错误代码
-                var errorCode = Marshal.GetLastPInvokeError();
+                int errorCode = Marshal.GetLastPInvokeError();
                 return new OperationResult(false, $"警告：Win32 操作异常，最后返回值 - {errorCode}");
             }
 
