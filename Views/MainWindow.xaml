@@ -8,8 +8,10 @@
     Title="虚拟机代理控制"
     Width="720"
     Height="460"
+    MaxWidth="720"
+    MaxHeight="460"
     ExtendsContentIntoTitleBar="True"
-    ResizeMode="CanMinimize"
+    ResizeMode="CanResize"
     WindowBackdropType="Mica"
     WindowStartupLocation="CenterScreen">
 
@@ -38,7 +40,9 @@
         <!--  标题栏  -->
         <ui:TitleBar
             Title="Hyper-V Proxy Manager"
-            Grid.Row="0" />
+            Grid.Row="0"
+            CanMaximize="False"
+            ShowMaximize="False" />
 
         <!--  主内容区域  -->
         <Grid
@@ -228,7 +232,8 @@
                     Height="50"
                     HorizontalAlignment="Stretch"
                     Appearance="Danger"
-                    Command="{Binding DisableProxyCommand}">
+                    Command="{Binding DisableProxyCommand}"
+                    IsEnabled="{Binding IsProxyEnabled}">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />
