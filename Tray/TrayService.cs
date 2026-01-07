@@ -1,37 +1,55 @@
 ﻿using System.Windows;
-
-using HyperVProxyManager.Views;
+using HyperVProxyManager.ViewModels;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace HyperVProxyManager.Tray;
 
-public static class TrayService
+public interface ITrayService
 {
-    public static void ShowMainWindow()
+    void Initialize();
+    void Shutdown();
+}
+
+public class TrayService(IServiceProvider serviceProvider) : ITrayService, IDisposable
+{
+    private readonly IServiceProvider _serviceProvider = serviceProvider;
+    private TrayIcon? _trayIcon;
+    private TrayMenuWindow? _menuWindow;
+
+    public void Initialize()
+        // 在 UI 线程创建托盘图标
+        => Application.Current.Dispatcher.Invoke(() =>
+        {
+            // 1. 创建 TrayIcon (XAML定义的外观和资源)
+            // 此时不设置 DataContext，因为该图标本身已简化为纯 UI 容器
+            _trayIcon = new TrayIcon();
+
+            // 2. 订阅点击事件
+            _trayIcon.TrayLeftMouseUp += OnTrayClick;
+            _trayIcon.TrayRightMouseUp += OnTrayClick;
+
+            // 3. 预加载菜单窗口 (确保单例存在)
+            _menuWindow = _serviceProvider.GetRequiredService<TrayMenuWindow>();
+        });
+
+    public void Shutdown()
     {
-        // 获取主窗口实例
-        if (Application.Current.MainWindow is not MainWindow window)
-            return;
-
-        // 1. 如果窗口是隐藏的（被关闭到了托盘），让它显示
-        if (!window.IsVisible)
-            window.Show();
-
-        // 2. 如果窗口是最小化的，还原它
-        if (window.WindowState == WindowState.Minimized)
-            window.WindowState = WindowState.Normal;
-
-        // 3. 核心增强：强制前台显示
-        // 单纯的 Activate 在某些情况下（如从后台进程唤起）可能抢不到焦点
-        // 通过临时 Topmost 可以强制窗口浮到最上层
-        window.Activate();
-        window.Topmost = true;
-        window.Topmost = false;
-        window.Focus();
+        _trayIcon?.Dispose();
+        _menuWindow?.Close();
     }
 
-    public static void HideMainWindow()
-        => Application.Current.MainWindow?.Hide();
+    public void Dispose()
+    {
+        Shutdown();
+        GC.SuppressFinalize(this);
+    }
 
-    public static void ExitApplication()
-        => Application.Current.Shutdown();
+    private void OnTrayClick(object sender, RoutedEventArgs e)
+    {
+        if (_menuWindow == null)
+            return;
+
+        // 调用自定义窗口的定位显示方法
+        _menuWindow.ShowAtCursor();
+    }
 }

@@ -1,19 +1,14 @@
 ﻿using System.Runtime.InteropServices;
 using System.Security;
 
+using Microsoft.Win32;
+
 using HyperVProxyManager.Core;
 using HyperVProxyManager.Models;
-
-using Microsoft.Win32;
+using HyperVProxyManager.Services.Interfaces;
 
 namespace HyperVProxyManager.Services;
 
-public interface IProxyService
-{
-    ProxyState GetSystemProxy();
-    OperationResult SetSystemProxy(string address);
-    OperationResult DisableSystemProxy();
-}
 
 public class ProxyService : IProxyService
 {

@@ -1,0 +1,98 @@
+﻿<Window
+    x:Class="HyperVProxyManager.Tray.TrayMenuWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    Width="280"
+    AllowsTransparency="True"
+    Background="Transparent"
+    ResizeMode="NoResize"
+    ShowInTaskbar="False"
+    SizeToContent="Height"
+    Topmost="True"
+    Visibility="Collapsed"
+    WindowStyle="None">
+
+    <ui:Card
+        Padding="0"
+        BorderThickness="1">
+        <StackPanel Margin="4">
+            <!--  状态信息区  -->
+            <Grid Margin="12,8">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <!--  状态指示灯  -->
+                <Ellipse
+                    Grid.Column="0"
+                    Width="10"
+                    Height="10"
+                    Margin="0,0,10,0"
+                    VerticalAlignment="Center">
+                    <Ellipse.Style>
+                        <Style TargetType="Ellipse">
+                            <Setter Property="Fill" Value="#737373" />
+                            <Style.Triggers>
+                                <DataTrigger
+                                    Binding="{Binding IsProxyEnabled}"
+                                    Value="True">
+                                    <Setter Property="Fill" Value="#00CC6A" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Ellipse.Style>
+                </Ellipse>
+
+                <TextBlock
+                    Grid.Column="1"
+                    VerticalAlignment="Center"
+                    Text="{Binding ProxyStatusText}"
+                    TextTrimming="CharacterEllipsis" />
+            </Grid>
+
+            <Separator
+                Margin="0,4"
+                Background="{DynamicResource ControlStrokeColorDefaultBrush}" />
+
+            <!--  操作按钮  -->
+            <ui:Button
+                HorizontalAlignment="Stretch"
+                HorizontalContentAlignment="Left"
+                Appearance="Transparent"
+                Command="{Binding QuickSetCommand}"
+                Content="快速应用 (7890)"
+                Icon="{ui:SymbolIcon Rocket24}" />
+
+            <ui:Button
+                HorizontalAlignment="Stretch"
+                HorizontalContentAlignment="Left"
+                Appearance="Transparent"
+                Command="{Binding DisableProxyCommand}"
+                Content="禁用代理"
+                Icon="{ui:SymbolIcon DismissCircle24}" />
+
+            <Separator
+                Margin="0,4"
+                Background="{DynamicResource ControlStrokeColorDefaultBrush}" />
+
+            <!--  系统操作  -->
+            <ui:Button
+                HorizontalAlignment="Stretch"
+                HorizontalContentAlignment="Left"
+                Appearance="Transparent"
+                Command="{Binding ShowMainWindowCommand}"
+                Content="打开主界面"
+                Icon="{ui:SymbolIcon AppWindow20}" />
+
+            <ui:Button
+                HorizontalAlignment="Stretch"
+                HorizontalContentAlignment="Left"
+                Appearance="Transparent"
+                Command="{Binding ExitCommand}"
+                Content="退出程序"
+                Icon="{ui:SymbolIcon Power24}" />
+        </StackPanel>
+    </ui:Card>
+</Window>

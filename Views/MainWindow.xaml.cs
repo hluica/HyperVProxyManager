@@ -2,7 +2,6 @@
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
-using HyperVProxyManager.Tray;
 using HyperVProxyManager.ViewModels;
 
 using Wpf.Ui.Appearance;
@@ -17,42 +16,30 @@ public partial class MainWindow : FluentWindow
         DataContext = viewModel;
         InitializeComponent();
 
-        // 1. 初始化系统主题监听 (处理窗口背景色)
         SystemThemeWatcher.Watch(this);
-
-        // 2. 订阅主题变更事件 (处理图标切换)
         ApplicationThemeManager.Changed += OnThemeChanged;
-
-        // 3. 首次加载时，根据当前主题设置一次图标
         UpdateWindowIcon(ApplicationThemeManager.GetAppTheme());
     }
 
-    //配置关闭操作
     protected override void OnClosing(CancelEventArgs e)
     {
-        e.Cancel = true; // 阻止真正关闭
-        TrayService.HideMainWindow();
+        e.Cancel = true; // 阻止销毁
+        Hide();          // 仅隐藏
     }
 
-    // 事件处理器：当系统或应用主题发生变化时触发
     private void OnThemeChanged(ApplicationTheme currentTheme, Color systemAccent)
         => UpdateWindowIcon(currentTheme);
 
-    // 核心更新逻辑：根据主题加载对应的嵌入资源图标
     private void UpdateWindowIcon(ApplicationTheme theme)
     {
         string iconFileName = theme == ApplicationTheme.Dark
             ? "AppIcon_Dark.ico"
             : "AppIcon_Light.ico";
-
         try
         {
             var iconUri = new Uri($"pack://application:,,,/Assets/{iconFileName}", UriKind.Absolute);
             Icon = new BitmapImage(iconUri);
         }
-        catch
-        {
-            // 容错处理：如果图标加载失败，保持原样或不处理
-        }
+        catch { /* 忽略资源加载错误 */ }
     }
 }

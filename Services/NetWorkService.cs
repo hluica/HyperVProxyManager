@@ -1,11 +1,9 @@
 ﻿using System.Net.NetworkInformation;
 
+using HyperVProxyManager.Services.Interfaces;
+
 namespace HyperVProxyManager.Services;
 
-public interface INetworkService
-{
-    Task<string?> GetHyperVHostIpAsync();
-}
 
 public class NetworkService : INetworkService
 {

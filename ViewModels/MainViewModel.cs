@@ -1,101 +1,88 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
-using HyperVProxyManager.Services;
+using HyperVProxyManager.Services.Interfaces;
 
 namespace HyperVProxyManager.ViewModels;
 
-public partial class MainViewModel(INetworkService networkService, IProxyService proxyService) : ObservableObject
+public partial class MainViewModel : ObservableObject
 {
-    private readonly INetworkService _networkService = networkService;
-    private readonly IProxyService _proxyService = proxyService;
+    private readonly IProxyStateStore _store;
+    private readonly IProxyService _proxyService;
 
-    // 固定的默认端口要求
-    private const string DefaultPort = "7890";
+    public MainViewModel(IProxyStateStore store, IProxyService proxyService)
+    {
+        _store = store;
+        _proxyService = proxyService;
 
-    [ObservableProperty]
-    private string _hostIpAddress = "正在检测...";
+        _store.PropertyChanged += (s, e) =>
+        {
+            if (e.PropertyName == nameof(IProxyStateStore.HostIpAddress))
+                OnPropertyChanged(nameof(HostIpAddress));
 
-    [ObservableProperty]
-    private string _currentProxyAddress = "未知";
+            if (e.PropertyName == nameof(IProxyStateStore.CurrentProxy))
+            {
+                OnPropertyChanged(nameof(CurrentProxyAddress));
+                OnPropertyChanged(nameof(IsProxyEnabled));
+            }
+        };
+    }
 
-    [ObservableProperty]
-    private bool _isProxyEnabled = false;
+    // 属性改为只读代理，或者配合 OnPropertyChanged 更新
+    public string HostIpAddress
+        => _store.HostIpAddress;
 
+    public string CurrentProxyAddress
+        => _store.CurrentProxy.IsEnabled
+            ? _store.CurrentProxy.ServerAddress
+            : "未启用";
+
+    public bool IsProxyEnabled
+        => _store.CurrentProxy.IsEnabled;
+
+    // 计算属性用于按钮禁用
+    public bool CanQuickSet
+        => !HostIpAddress.Contains("未检测") && !HostIpAddress.Contains("正在检测");
+
+    // 依然保留一个 UI 状态属性
     [ObservableProperty]
     private string _statusMessage = "就绪";
 
-    [ObservableProperty]
-    private bool _canQuickSet = false;
-
     [RelayCommand]
     private async Task OnLoaded()
-        => await RefreshDataAsync();
+        => await _store.RefreshAsync();
 
     [RelayCommand]
     private async Task OnRefresh()
     {
         StatusMessage = "正在刷新...";
-        await RefreshDataAsync();
+        await _store.RefreshAsync();
         StatusMessage = "刷新完成";
+
+        // 强制通知 CanQuickSet 更新
+        OnPropertyChanged(nameof(CanQuickSet));
     }
 
     [RelayCommand]
-    private void OnQuickSet()
+    private async Task OnQuickSet()
     {
-        if (string.IsNullOrEmpty(HostIpAddress) || !CanQuickSet)
-        {
-            StatusMessage = "错误：未检测到有效的宿主机 IP";
+        if (!CanQuickSet)
             return;
-        }
 
-        string targetProxy = $"{HostIpAddress}:{DefaultPort}";
+        string targetProxy = $"{HostIpAddress}:7890";
         var result = _proxyService.SetSystemProxy(targetProxy);
-
-        // 直接显示来自底层的准确消息
         StatusMessage = result.Message;
 
-        if (result.IsSuccess)
-            UpdateProxyDisplay();
+        if (result.IsSuccess) await _store.RefreshAsync();
     }
 
     [RelayCommand]
-    private void OnDisableProxy()
+    private async Task OnDisableProxy()
     {
         var result = _proxyService.DisableSystemProxy();
-
-        // 直接显示来自底层的准确消息
         StatusMessage = result.Message;
 
         if (result.IsSuccess)
-            UpdateProxyDisplay();
-    }
-
-    private async Task RefreshDataAsync()
-    {
-        // 1. 获取宿主机 IP
-        string? ip = await _networkService.GetHyperVHostIpAsync();
-        if (!string.IsNullOrEmpty(ip))
-        {
-            HostIpAddress = ip;
-            CanQuickSet = true;
-        }
-        else
-        {
-            HostIpAddress = "未检测到虚拟机网关";
-            CanQuickSet = false;
-        }
-
-        // 2. 获取当前代理状态
-        UpdateProxyDisplay();
-    }
-
-    private void UpdateProxyDisplay()
-    {
-        var state = _proxyService.GetSystemProxy();
-        IsProxyEnabled = state.IsEnabled;
-        CurrentProxyAddress = state.IsEnabled
-            ? state.ServerAddress
-            : "未启用";
+            await _store.RefreshAsync();
     }
 }

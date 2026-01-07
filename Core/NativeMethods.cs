@@ -8,6 +8,7 @@ public record OperationResult(bool IsSuccess, string Message);
 // 执行外部操作
 internal static partial class NativeMethods
 {
+    // --- WinINet ---
     [LibraryImport(
         "wininet.dll",
         EntryPoint = "InternetSetOptionW",
@@ -23,4 +24,20 @@ internal static partial class NativeMethods
     public const int INTERNET_OPTION_SETTINGS_CHANGED = 39;
     // 刷新代理数据
     public const int INTERNET_OPTION_REFRESH = 37;
+
+    // --- User32 ---
+    [StructLayout(LayoutKind.Sequential)]
+    public struct POINT
+    {
+        public int X;
+        public int Y;
+    }
+
+    [LibraryImport("user32.dll")]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    public static partial bool GetCursorPos(out POINT lpPoint);
+
+    [LibraryImport("user32.dll")]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    public static partial bool SetForegroundWindow(IntPtr hWnd);
 }
