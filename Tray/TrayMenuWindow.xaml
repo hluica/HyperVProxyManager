@@ -4,107 +4,116 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     Width="220"
-    AllowsTransparency="True"
-    Background="Transparent"
     ResizeMode="NoResize"
     ShowInTaskbar="False"
     SizeToContent="Height"
     Topmost="True"
     Visibility="Collapsed"
-    WindowStyle="None">
+    WindowStyle="SingleBorderWindow">
 
-    <StackPanel Margin="4">
-        <!--  状态信息区  -->
-        <ui:Card VerticalAlignment="Stretch">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
+    <WindowChrome.WindowChrome>
+        <WindowChrome
+            CaptionHeight="0"
+            CornerRadius="0"
+            GlassFrameThickness="1"
+            ResizeBorderThickness="0"
+            UseAeroCaptionButtons="False" />
+    </WindowChrome.WindowChrome>
 
-                <Ellipse
-                    Grid.Column="0"
-                    Width="12"
-                    Height="12"
-                    Margin="0,0,10,0"
-                    VerticalAlignment="Center">
-                    <Ellipse.Style>
-                        <Style TargetType="Ellipse">
-                            <Setter Property="Fill" Value="#737373" />
-                            <Style.Triggers>
-                                <DataTrigger
-                                    Binding="{Binding IsProxyEnabled}"
-                                    Value="True">
-                                    <Setter Property="Fill" Value="#00CC6A" />
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </Ellipse.Style>
-                </Ellipse>
+    <Border Background="{ui:ThemeResource SolidBackgroundFillColorBaseBrush}">
+        <StackPanel Margin="4">
+            <!--  状态信息区  -->
+            <ui:Card VerticalAlignment="Stretch">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
 
-                <TextBlock
-                    Grid.Column="1"
-                    VerticalAlignment="Center"
-                    Foreground="{ui:ThemeResource TextFillColorPrimaryBrush}"
-                    Text="{Binding ProxyStatusText}"
-                    TextTrimming="CharacterEllipsis" />
-            </Grid>
-        </ui:Card>
+                    <Ellipse
+                        Grid.Column="0"
+                        Width="12"
+                        Height="12"
+                        Margin="0,0,10,0"
+                        VerticalAlignment="Center">
+                        <Ellipse.Style>
+                            <Style TargetType="Ellipse">
+                                <Setter Property="Fill" Value="#737373" />
+                                <Style.Triggers>
+                                    <DataTrigger
+                                        Binding="{Binding IsProxyEnabled}"
+                                        Value="True">
+                                        <Setter Property="Fill" Value="#00CC6A" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Ellipse.Style>
+                    </Ellipse>
 
-        <Separator Margin="2,3" />
+                    <TextBlock
+                        Grid.Column="1"
+                        VerticalAlignment="Center"
+                        Foreground="{ui:ThemeResource TextFillColorPrimaryBrush}"
+                        Text="{Binding ProxyStatusText}"
+                        TextTrimming="CharacterEllipsis" />
+                </Grid>
+            </ui:Card>
 
-        <!--  操作按钮  -->
-        <ui:Button
-            Height="34"
-            HorizontalAlignment="Stretch"
-            HorizontalContentAlignment="Left"
-            Appearance="Transparent"
-            Command="{Binding QuickSetCommand}"
-            IsEnabled="{Binding CanQuickSet}">
-            <ui:Button.Icon>
-                <ui:SymbolIcon Symbol="Rocket24" />
-            </ui:Button.Icon>
-            快速应用
-        </ui:Button>
+            <Separator Margin="2,3" />
 
-        <ui:Button
-            Height="34"
-            HorizontalAlignment="Stretch"
-            HorizontalContentAlignment="Left"
-            Appearance="Transparent"
-            Command="{Binding DisableProxyCommand}"
-            IsEnabled="{Binding IsProxyEnabled}">
-            <ui:Button.Icon>
-                <ui:SymbolIcon Symbol="DismissCircle24" />
-            </ui:Button.Icon>
-            禁用代理
-        </ui:Button>
+            <!--  操作按钮  -->
+            <ui:Button
+                Height="34"
+                HorizontalAlignment="Stretch"
+                HorizontalContentAlignment="Left"
+                Appearance="Transparent"
+                Command="{Binding QuickSetCommand}"
+                IsEnabled="{Binding CanQuickSet}">
+                <ui:Button.Icon>
+                    <ui:SymbolIcon Symbol="Rocket24" />
+                </ui:Button.Icon>
+                快速应用
+            </ui:Button>
 
-        <Separator Margin="2,3" />
+            <ui:Button
+                Height="34"
+                HorizontalAlignment="Stretch"
+                HorizontalContentAlignment="Left"
+                Appearance="Transparent"
+                Command="{Binding DisableProxyCommand}"
+                IsEnabled="{Binding IsProxyEnabled}">
+                <ui:Button.Icon>
+                    <ui:SymbolIcon Symbol="DismissCircle24" />
+                </ui:Button.Icon>
+                禁用代理
+            </ui:Button>
 
-        <!--  系统操作  -->
-        <ui:Button
-            Height="34"
-            HorizontalAlignment="Stretch"
-            HorizontalContentAlignment="Left"
-            Appearance="Transparent"
-            Command="{Binding ShowMainWindowCommand}">
-            <ui:Button.Icon>
-                <ui:SymbolIcon Symbol="Window24" />
-            </ui:Button.Icon>
-            打开主界面
-        </ui:Button>
+            <Separator Margin="2,3" />
 
-        <ui:Button
-            Height="34"
-            HorizontalAlignment="Stretch"
-            HorizontalContentAlignment="Left"
-            Appearance="Transparent"
-            Command="{Binding ExitCommand}">
-            <ui:Button.Icon>
-                <ui:SymbolIcon Symbol="Power24" />
-            </ui:Button.Icon>
-            退出程序
-        </ui:Button>
-    </StackPanel>
+            <!--  系统操作  -->
+            <ui:Button
+                Height="34"
+                HorizontalAlignment="Stretch"
+                HorizontalContentAlignment="Left"
+                Appearance="Transparent"
+                Command="{Binding ShowMainWindowCommand}">
+                <ui:Button.Icon>
+                    <ui:SymbolIcon Symbol="Window24" />
+                </ui:Button.Icon>
+                打开主界面
+            </ui:Button>
+
+            <ui:Button
+                Height="34"
+                HorizontalAlignment="Stretch"
+                HorizontalContentAlignment="Left"
+                Appearance="Transparent"
+                Command="{Binding ExitCommand}">
+                <ui:Button.Icon>
+                    <ui:SymbolIcon Symbol="Power24" />
+                </ui:Button.Icon>
+                退出程序
+            </ui:Button>
+        </StackPanel>
+    </Border>
 </Window>
