@@ -46,10 +46,26 @@ public partial class App : Application
         ConfigureServices(serviceCollection);
         ServiceProvider = serviceCollection.BuildServiceProvider();
 
-        // 启动主窗口
+        // 获取主窗口实例 (但不立即显示)
         var mainWindow = ServiceProvider.GetRequiredService<MainWindow>();
         MainWindow = mainWindow;
-        mainWindow.Show();
+
+        // 检查启动参数
+        bool startInBackground = false;
+        if (e.Args.Length > 0)
+        {
+            foreach (string? arg in e.Args)
+            {
+                // 忽略大小写检查 --background 参数
+                if (string.Equals(arg, "--background", StringComparison.OrdinalIgnoreCase))
+                {
+                    startInBackground = true;
+                    break;
+                }
+            }
+        }
+        if (!startInBackground)
+            mainWindow.Show();
 
         // 绑定托盘 DataContext
         _trayIcon = new TrayIcon(mainWindow.DataContext);
