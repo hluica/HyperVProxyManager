@@ -1,12 +1,12 @@
 ﻿using System.Windows;
 
-using Microsoft.Extensions.DependencyInjection;
-
 using HyperVProxyManager.Services;
 using HyperVProxyManager.Services.Interfaces;
 using HyperVProxyManager.Tray;
 using HyperVProxyManager.ViewModels;
 using HyperVProxyManager.Views;
+
+using Microsoft.Extensions.DependencyInjection;
 
 namespace HyperVProxyManager;
 

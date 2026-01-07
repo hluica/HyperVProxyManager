@@ -1,5 +1,7 @@
 ﻿using System.Windows;
-using HyperVProxyManager.ViewModels;
+
+using HyperVProxyManager.Views;
+
 using Microsoft.Extensions.DependencyInjection;
 
 namespace HyperVProxyManager.Tray;
@@ -25,8 +27,8 @@ public class TrayService(IServiceProvider serviceProvider) : ITrayService, IDisp
             _trayIcon = new TrayIcon();
 
             // 2. 订阅点击事件
-            _trayIcon.TrayLeftMouseUp += OnTrayClick;
-            _trayIcon.TrayRightMouseUp += OnTrayClick;
+            _trayIcon.TrayLeftMouseUp += OnLeftClick;
+            _trayIcon.TrayRightMouseUp += OnRightClick;
 
             // 3. 预加载菜单窗口 (确保单例存在)
             _menuWindow = _serviceProvider.GetRequiredService<TrayMenuWindow>();
@@ -44,12 +46,26 @@ public class TrayService(IServiceProvider serviceProvider) : ITrayService, IDisp
         GC.SuppressFinalize(this);
     }
 
-    private void OnTrayClick(object sender, RoutedEventArgs e)
-    {
-        if (_menuWindow == null)
-            return;
-
+    private void OnRightClick(object sender, RoutedEventArgs e)
         // 调用自定义窗口的定位显示方法
-        _menuWindow.ShowAtCursor();
+        => _menuWindow?.ShowAtCursor();
+
+    private void OnLeftClick(object sender, RoutedEventArgs e)
+    {
+        // 通过 DI 获取主窗口单例
+        var window = _serviceProvider.GetRequiredService<MainWindow>();
+
+        // 1. 显示窗口
+        window.Show();
+
+        // 2. 如果是最小化状态，还原它
+        if (window.WindowState == WindowState.Minimized)
+            window.WindowState = WindowState.Normal;
+
+        // 3. 强制前台显示 (Hack: Topmost toggle)
+        window.Activate();
+        window.Topmost = true;
+        window.Topmost = false;
+        window.Focus();
     }
 }

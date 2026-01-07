@@ -73,7 +73,8 @@ public partial class MainViewModel : ObservableObject
         var result = _proxyService.SetSystemProxy(targetProxy);
         StatusMessage = result.Message;
 
-        if (result.IsSuccess) await _store.RefreshAsync();
+        if (result.IsSuccess)
+            await _store.RefreshAsync();
     }
 
     [RelayCommand]
