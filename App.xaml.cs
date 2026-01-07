@@ -1,12 +1,12 @@
 ﻿using System.Windows;
 
+using Microsoft.Extensions.DependencyInjection;
+
 using HyperVProxyManager.Services;
 using HyperVProxyManager.Services.Interfaces;
 using HyperVProxyManager.Tray;
 using HyperVProxyManager.ViewModels;
 using HyperVProxyManager.Views;
-
-using Microsoft.Extensions.DependencyInjection;
 
 namespace HyperVProxyManager;
 
@@ -65,10 +65,10 @@ public partial class App : Application
         services.AddSingleton<INetworkService, NetworkService>();
         services.AddSingleton<IProxyService, ProxyService>();
 
-        // State Store (Singleton Source of Truth)
+        // State Store Service
         services.AddSingleton<IProxyStateStore, ProxyStateStore>();
 
-        // Tray Services
+        // Tray Service
         services.AddSingleton<ITrayService, TrayService>();
 
         // ViewModels

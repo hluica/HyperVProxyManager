@@ -1,4 +1,5 @@
-﻿using System.Windows.Media.Imaging;
+﻿using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 using Hardcodet.Wpf.TaskbarNotification;
 
@@ -12,14 +13,11 @@ public partial class TrayIcon : TaskbarIcon
     {
         InitializeComponent();
 
-        // 初始化图标
         UpdateTrayIcon(ApplicationThemeManager.GetAppTheme());
-
-        // 订阅主题变更
         ApplicationThemeManager.Changed += OnThemeChanged;
     }
 
-    private void OnThemeChanged(ApplicationTheme currentTheme, System.Windows.Media.Color systemAccent)
+    private void OnThemeChanged(ApplicationTheme currentTheme, Color systemAccent)
         => Dispatcher.Invoke(() => UpdateTrayIcon(currentTheme));
 
     private void UpdateTrayIcon(ApplicationTheme theme)

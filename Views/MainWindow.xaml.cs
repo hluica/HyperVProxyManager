@@ -17,8 +17,8 @@ public partial class MainWindow : FluentWindow
         InitializeComponent();
 
         SystemThemeWatcher.Watch(this);
-        ApplicationThemeManager.Changed += OnThemeChanged;
         UpdateWindowIcon(ApplicationThemeManager.GetAppTheme());
+        ApplicationThemeManager.Changed += OnThemeChanged;
     }
 
     protected override void OnClosing(CancelEventArgs e)

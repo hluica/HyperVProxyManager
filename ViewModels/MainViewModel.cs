@@ -18,7 +18,10 @@ public partial class MainViewModel : ObservableObject
         _store.PropertyChanged += (s, e) =>
         {
             if (e.PropertyName == nameof(IProxyStateStore.HostIpAddress))
+            {
                 OnPropertyChanged(nameof(HostIpAddress));
+                OnPropertyChanged(nameof(CanQuickSet));
+            }
 
             if (e.PropertyName == nameof(IProxyStateStore.CurrentProxy))
             {

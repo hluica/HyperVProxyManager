@@ -27,7 +27,7 @@ public partial class ProxyStateStore(INetworkService networkService, IProxyServi
             // 并行执行检测任务
             var ipTask = _networkService.GetHyperVHostIpAsync();
 
-            // 同步获取注册表状态（通常很快，无需 Task.Run）
+            // 同步获取注册表状态
             var proxyState = _proxyService.GetSystemProxy();
 
             string? ip = await ipTask;

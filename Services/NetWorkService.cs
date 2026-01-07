@@ -1,4 +1,5 @@
 ﻿using System.Net.NetworkInformation;
+using System.Net.Sockets;
 
 using HyperVProxyManager.Services.Interfaces;
 
@@ -26,7 +27,7 @@ public class NetworkService : INetworkService
                 var ipProperties = hyperVInterface.GetIPProperties();
                 var gateway = ipProperties?.GatewayAddresses
                     .FirstOrDefault(ga =>
-                        ga.Address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork);
+                        ga.Address.AddressFamily == AddressFamily.InterNetwork);
 
                 return gateway?.Address.ToString();
             }

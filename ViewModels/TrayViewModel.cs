@@ -1,9 +1,12 @@
 ﻿using System.Windows;
+
+using Microsoft.Extensions.DependencyInjection;
+
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+
 using HyperVProxyManager.Services.Interfaces;
 using HyperVProxyManager.Views;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace HyperVProxyManager.ViewModels;
 
@@ -22,6 +25,11 @@ public partial class TrayViewModel : ObservableObject
         // 监听 Store 变化更新 UI
         _store.PropertyChanged += (s, e) =>
         {
+            if (e.PropertyName == nameof(IProxyStateStore.HostIpAddress))
+            {
+                OnPropertyChanged(nameof(CanQuickSet));
+            }
+
             if (e.PropertyName == nameof(IProxyStateStore.CurrentProxy))
             {
                 OnPropertyChanged(nameof(IsProxyEnabled));

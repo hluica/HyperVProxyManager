@@ -1,11 +1,11 @@
 ﻿using System.Runtime.InteropServices;
 using System.Security;
 
+using Microsoft.Win32;
+
 using HyperVProxyManager.Core;
 using HyperVProxyManager.Models;
 using HyperVProxyManager.Services.Interfaces;
-
-using Microsoft.Win32;
 
 namespace HyperVProxyManager.Services;
 

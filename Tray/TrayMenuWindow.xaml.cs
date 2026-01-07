@@ -5,14 +5,18 @@ using System.Windows.Interop;
 using HyperVProxyManager.Core;
 using HyperVProxyManager.ViewModels;
 
+using Wpf.Ui.Appearance;
+
 namespace HyperVProxyManager.Tray;
 
 public partial class TrayMenuWindow : Window
 {
     public TrayMenuWindow(TrayViewModel viewModel)
     {
-        InitializeComponent();
         DataContext = viewModel;
+        InitializeComponent();
+
+        SystemThemeWatcher.Watch(this);
 
         // 订阅 Deactivated 事件：失去焦点时隐藏窗口
         Deactivated += (s, e) => Hide();

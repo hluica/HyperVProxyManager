@@ -15,11 +15,7 @@ internal static partial class NativeMethods
     // 刷新代理数据
     public const int INTERNET_OPTION_REFRESH = 37;
 
-    [LibraryImport(
-         "wininet.dll",
-         EntryPoint = "InternetSetOptionW",
-         SetLastError = true,
-         StringMarshalling = StringMarshalling.Utf16)]
+    [LibraryImport("wininet.dll", EntryPoint = "InternetSetOptionW", SetLastError = true)]
     public static partial int InternetSetOption(
          IntPtr hInternet,
          int dwOption,
