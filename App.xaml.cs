@@ -24,52 +24,39 @@ public partial class App : Application
 
     protected override void OnStartup(StartupEventArgs e)
     {
-        // 1. 检查是否已有实例运行
-        _mutex = new Mutex(true, AppUniqueName, out bool isNewInstance);
-
-        if (!isNewInstance)
+        // 1. 单实例检查
+        if (!TryAcquireSingleton())
         {
-            // 如果不是新实例，说明程序已经在运行
             NotifyExistingInstance();
-            // 关闭当前重复启动的进程
             Shutdown();
             return;
         }
 
-        // 2. 如果是新实例，启动监听线程等待唤醒信号
+        // 2. 启动跨进程唤醒监听
         StartSignalListener();
 
         base.OnStartup(e);
 
-        // 配置服务
-        var serviceCollection = new ServiceCollection();
-        ConfigureServices(serviceCollection);
-        ServiceProvider = serviceCollection.BuildServiceProvider();
+        // 3. 构建依赖注入容器
+        ServiceProvider = BuildServiceProvider();
 
-        // 获取主窗口实例 (但不立即显示)
-        var mainWindow = ServiceProvider.GetRequiredService<MainWindow>();
-        MainWindow = mainWindow;
+        // 4. 创建并初始化主窗口（始终完成一次 Show/Hide）
+        var mainWindow = InitializeMainWindow();
 
-        // 检查启动参数
-        bool startInBackground = false;
-        if (e.Args.Length > 0)
+        // 5. 根据启动参数决定是否对用户可见
+        if (ShouldStartInBackground(e.Args))
         {
-            foreach (string? arg in e.Args)
-            {
-                // 忽略大小写检查 --background 参数
-                if (string.Equals(arg, "--background", StringComparison.OrdinalIgnoreCase))
-                {
-                    startInBackground = true;
-                    break;
-                }
-            }
+            mainWindow.Hide();
         }
-        if (!startInBackground)
+        else
+        {
             mainWindow.Show();
+        }
 
-        // 绑定托盘 DataContext
+        // 6. 初始化托盘（依赖已完成初始化的窗口）
         _trayIcon = new TrayIcon(mainWindow.DataContext);
     }
+
 
     protected override void OnExit(ExitEventArgs e)
     {
@@ -81,6 +68,19 @@ public partial class App : Application
         _mutex?.Dispose();
 
         base.OnExit(e);
+    }
+
+    private static bool TryAcquireSingleton()
+    {
+        _mutex = new Mutex(true, AppUniqueName, out bool isNewInstance);
+        return isNewInstance;
+    }
+
+    private static ServiceProvider BuildServiceProvider()
+    {
+        var services = new ServiceCollection();
+        ConfigureServices(services);
+        return services.BuildServiceProvider();
     }
 
     private static void ConfigureServices(IServiceCollection services)
@@ -95,6 +95,22 @@ public partial class App : Application
         // 注册 Views
         services.AddSingleton<MainWindow>();
     }
+
+    private MainWindow InitializeMainWindow()
+    {
+        var window = ServiceProvider!.GetRequiredService<MainWindow>();
+
+        window.Show();
+        window.Hide();
+
+        MainWindow = window;
+        return window;
+    }
+
+    private static bool ShouldStartInBackground(string[] args)
+        => args.Any(arg =>
+            string.Equals(arg, "--background", StringComparison.OrdinalIgnoreCase));
+
 
     // 通知已存在的应用实例
     private static void NotifyExistingInstance()
