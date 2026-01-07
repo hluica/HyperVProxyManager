@@ -28,21 +28,19 @@ public partial class MainViewModel : ObservableObject
         };
     }
 
-    // 属性改为只读代理，或者配合 OnPropertyChanged 更新
     public string HostIpAddress
         => _store.HostIpAddress;
+
+    public bool CanQuickSet
+        => !HostIpAddress.Contains("未检测") && !HostIpAddress.Contains("正在检测");
+
+    public bool IsProxyEnabled
+        => _store.CurrentProxy.IsEnabled;
 
     public string CurrentProxyAddress
         => _store.CurrentProxy.IsEnabled
             ? _store.CurrentProxy.ServerAddress
             : "未启用";
-
-    public bool IsProxyEnabled
-        => _store.CurrentProxy.IsEnabled;
-
-    // 计算属性用于按钮禁用
-    public bool CanQuickSet
-        => !HostIpAddress.Contains("未检测") && !HostIpAddress.Contains("正在检测");
 
     // 依然保留一个 UI 状态属性
     [ObservableProperty]

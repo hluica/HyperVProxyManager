@@ -4,7 +4,6 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
-    xmlns:vm="clr-namespace:HyperVProxyManager.ViewModels"
     Title="虚拟机代理控制"
     Width="720"
     Height="460"
@@ -120,27 +119,25 @@
                             Symbol="Globe24" />
 
                         <!--  状态指示灯  -->
-                        <Border
-                            Width="10"
-                            Height="10"
-                            Margin="10,0,0,0"
-                            VerticalAlignment="Center"
-                            CornerRadius="5">
-                            <Border.Style>
-                                <Style TargetType="Border">
-                                    <!--  Default: Grey  -->
-                                    <Setter Property="Background" Value="#737373" />
+                        <Ellipse
+                            Grid.Column="0"
+                            Width="12"
+                            Height="12"
+                            Margin="12,0,12,0"
+                            VerticalAlignment="Center">
+                            <Ellipse.Style>
+                                <Style TargetType="Ellipse">
+                                    <Setter Property="Fill" Value="#737373" />
                                     <Style.Triggers>
                                         <DataTrigger
                                             Binding="{Binding IsProxyEnabled}"
                                             Value="True">
-                                            <!--  Active: Green  -->
-                                            <Setter Property="Background" Value="#00CC6A" />
+                                            <Setter Property="Fill" Value="#00CC6A" />
                                         </DataTrigger>
                                     </Style.Triggers>
                                 </Style>
-                            </Border.Style>
-                        </Border>
+                            </Ellipse.Style>
+                        </Ellipse>
                     </StackPanel>
 
                     <TextBlock

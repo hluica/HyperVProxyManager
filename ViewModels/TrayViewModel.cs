@@ -30,6 +30,11 @@ public partial class TrayViewModel : ObservableObject
         };
     }
 
+    public string HostIpAddress
+        => _store.HostIpAddress;
+    public bool CanQuickSet
+        => !HostIpAddress.Contains("未检测") && !HostIpAddress.Contains("正在检测");
+
     public bool IsProxyEnabled
         => _store.CurrentProxy.IsEnabled;
 
