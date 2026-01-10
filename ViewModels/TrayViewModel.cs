@@ -22,26 +22,21 @@ public partial class TrayViewModel : ObservableObject
         // 监听 Store 变化更新 UI
         _store.PropertyChanged += (s, e) =>
         {
-            if (e.PropertyName == nameof(IProxyStateStore.HostIpAddress))
-            {
-                OnPropertyChanged(nameof(CanQuickSet));
-            }
-
-            if (e.PropertyName == nameof(IProxyStateStore.CurrentProxy))
-            {
-                OnPropertyChanged(nameof(IsProxyEnabled));
-                OnPropertyChanged(nameof(ProxyStatusText));
-            }
+            OnPropertyChanged(nameof(IsProxyEnabled));
+            OnPropertyChanged(nameof(CanQuickSet));
+            OnPropertyChanged(nameof(ProxyStatusText));
         };
     }
 
     public string HostIpAddress
         => _store.HostIpAddress;
-    public bool CanQuickSet
-        => !HostIpAddress.Contains("未检测") && !HostIpAddress.Contains("正在检测");
-
     public bool IsProxyEnabled
         => _store.CurrentProxy.IsEnabled;
+
+    public bool CanQuickSet
+        => !HostIpAddress.Contains("未检测")
+            && !HostIpAddress.Contains("正在检测")
+            && !IsProxyEnabled;
 
     public string ProxyStatusText
         => _store.CurrentProxy.IsEnabled

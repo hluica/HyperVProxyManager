@@ -80,13 +80,13 @@
                         Grid.Row="0"
                         HorizontalAlignment="Left"
                         FontSize="24"
-                        Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                        Foreground="{ui:ThemeResource TextFillColorSecondaryBrush}"
                         Symbol="Desktop24" />
 
                     <TextBlock
                         Grid.Row="1"
                         Margin="0,12,0,4"
-                        Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                        Foreground="{ui:ThemeResource TextFillColorSecondaryBrush}"
                         Text="宿主机 IPv4" />
 
                     <TextBlock
@@ -115,7 +115,7 @@
                         Orientation="Horizontal">
                         <ui:SymbolIcon
                             FontSize="24"
-                            Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                            Foreground="{ui:ThemeResource TextFillColorSecondaryBrush}"
                             Symbol="Globe24" />
 
                         <!--  状态指示灯  -->
@@ -143,7 +143,7 @@
                     <TextBlock
                         Grid.Row="1"
                         Margin="0,12,0,4"
-                        Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                        Foreground="{ui:ThemeResource TextFillColorSecondaryBrush}"
                         Text="当前系统代理" />
 
                     <TextBlock
@@ -260,7 +260,7 @@
             <StatusBarItem>
                 <TextBlock
                     FontSize="12"
-                    Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                    Foreground="{ui:ThemeResource TextFillColorSecondaryBrush}"
                     Text="{Binding StatusMessage}" />
             </StatusBarItem>
         </StatusBar>

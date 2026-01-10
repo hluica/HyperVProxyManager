@@ -17,28 +17,23 @@ public partial class MainViewModel : ObservableObject
 
         _store.PropertyChanged += (s, e) =>
         {
-            if (e.PropertyName == nameof(IProxyStateStore.HostIpAddress))
-            {
-                OnPropertyChanged(nameof(HostIpAddress));
-                OnPropertyChanged(nameof(CanQuickSet));
-            }
-
-            if (e.PropertyName == nameof(IProxyStateStore.CurrentProxy))
-            {
-                OnPropertyChanged(nameof(CurrentProxyAddress));
-                OnPropertyChanged(nameof(IsProxyEnabled));
-            }
+            OnPropertyChanged(nameof(HostIpAddress));
+            OnPropertyChanged(nameof(IsProxyEnabled));
+            OnPropertyChanged(nameof(CanQuickSet));
+            OnPropertyChanged(nameof(CurrentProxyAddress));
         };
     }
 
     public string HostIpAddress
         => _store.HostIpAddress;
 
-    public bool CanQuickSet
-        => !HostIpAddress.Contains("未检测") && !HostIpAddress.Contains("正在检测");
-
     public bool IsProxyEnabled
         => _store.CurrentProxy.IsEnabled;
+
+    public bool CanQuickSet
+        => !HostIpAddress.Contains("未检测")
+            && !HostIpAddress.Contains("正在检测")
+            && !IsProxyEnabled;
 
     public string CurrentProxyAddress
         => _store.CurrentProxy.IsEnabled
