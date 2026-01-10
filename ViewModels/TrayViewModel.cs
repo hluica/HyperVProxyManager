@@ -1,12 +1,9 @@
 ﻿using System.Windows;
-
-using Microsoft.Extensions.DependencyInjection;
-
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-
 using HyperVProxyManager.Services.Interfaces;
 using HyperVProxyManager.Views;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace HyperVProxyManager.ViewModels;
 
@@ -50,6 +47,10 @@ public partial class TrayViewModel : ObservableObject
         => _store.CurrentProxy.IsEnabled
             ? $"{_store.CurrentProxy.ServerAddress}"
             : "系统代理已禁用";
+
+    [RelayCommand]
+    private async Task OnMenuLoaded()
+        => await _store.RefreshAsync();
 
     [RelayCommand]
     private async Task OnQuickSet()
