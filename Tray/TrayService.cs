@@ -63,9 +63,9 @@ public class TrayService(IServiceProvider serviceProvider) : ITrayService, IDisp
             window.WindowState = WindowState.Normal;
 
         // 3. 强制前台显示 (Hack: Topmost toggle)
-        window.Activate();
+        _ = window.Activate();
         window.Topmost = true;
         window.Topmost = false;
-        window.Focus();
+        _ = window.Focus();
     }
 }

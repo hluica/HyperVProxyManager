@@ -61,23 +61,15 @@ public partial class App : Application
     {
         var services = new ServiceCollection();
 
-        // Core Services
-        services.AddSingleton<INetworkService, NetworkService>();
-        services.AddSingleton<IProxyService, ProxyService>();
-
-        // State Store Service
-        services.AddSingleton<IProxyStateStore, ProxyStateStore>();
-
-        // Tray Service
-        services.AddSingleton<ITrayService, TrayService>();
-
-        // ViewModels
-        services.AddTransient<MainViewModel>();
-        services.AddTransient<TrayViewModel>();
-
-        // Views (Windows should be Singleton to maintain state when hidden)
-        services.AddSingleton<MainWindow>();
-        services.AddSingleton<TrayMenuWindow>();
+        _ = services
+            .AddSingleton<INetworkService, NetworkService>()
+            .AddSingleton<IProxyService, ProxyService>()
+            .AddSingleton<IProxyStateStore, ProxyStateStore>()
+            .AddSingleton<ITrayService, TrayService>()
+            .AddTransient<MainViewModel>()
+            .AddTransient<TrayViewModel>()
+            .AddSingleton<MainWindow>()
+            .AddSingleton<TrayMenuWindow>();
 
         return services.BuildServiceProvider();
     }
@@ -97,7 +89,7 @@ public partial class App : Application
         try
         {
             using var handle = EventWaitHandle.OpenExisting(AppUniqueName + "_Signal");
-            handle.Set();
+            _ = handle.Set();
         }
         catch { }
     }
@@ -118,10 +110,10 @@ public partial class App : Application
                     if (window != null)
                     {
                         window.Show();
-                        window.Activate();
+                        _ = window.Activate();
                         window.Topmost = true;
                         window.Topmost = false;
-                        window.Focus();
+                        _ = window.Focus();
                     }
                 });
             }

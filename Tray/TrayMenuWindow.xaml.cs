@@ -49,7 +49,7 @@ public partial class TrayMenuWindow : Window
             return;
 
         // 4. 获取该显示器 DPI
-        NativeMethods.GetDpiForMonitor(
+        _ = NativeMethods.GetDpiForMonitor(
             hMonitor,
             NativeMethods.MonitorDpiType.EffectiveDpi,
             out uint dpiX,
@@ -60,8 +60,8 @@ public partial class TrayMenuWindow : Window
         double scaleY = dpiY / 96.0;
 
         Point cursor = new(
-        pt.X / scaleX,
-        pt.Y / scaleY);
+            pt.X / scaleX,
+            pt.Y / scaleY);
 
         // 6. 显示窗口并完成布局
         ShowActivated = true;
@@ -91,16 +91,12 @@ public partial class TrayMenuWindow : Window
 
         // 8. Clamp 到工作区
         left = Math.Max(
-            screenBounds.Left,
-            Math.Min(
-                left,
-                screenBounds.Right - winW));
+            screenBounds.Left, Math.Min(
+                left, screenBounds.Right - winW));
 
         top = Math.Max(
-            screenBounds.Top,
-            Math.Min(
-                top,
-                screenBounds.Bottom - winH));
+            screenBounds.Top, Math.Min(
+                top, screenBounds.Bottom - winH));
 
 
         Left = left;
@@ -108,10 +104,10 @@ public partial class TrayMenuWindow : Window
 
         // 9. 强制前台与激活（托盘窗口必需）
         nint hwnd = new WindowInteropHelper(this).Handle;
-        NativeMethods.SetForegroundWindow(hwnd);
 
-        Activate();
-        Focus();
+        _ = NativeMethods.SetForegroundWindow(hwnd);
+        _ = Activate();
+        _ = Focus();
     }
 
 }

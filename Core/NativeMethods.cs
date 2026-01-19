@@ -16,7 +16,8 @@ internal static partial class NativeMethods
     public const int INTERNET_OPTION_REFRESH = 37;
 
     [LibraryImport("wininet.dll", EntryPoint = "InternetSetOptionW", SetLastError = true)]
-    public static partial int InternetSetOption(
+    [return: MarshalAs(UnmanagedType.Bool)]
+    public static partial bool InternetSetOption(
          IntPtr hInternet,
          int dwOption,
          IntPtr lpBuffer,

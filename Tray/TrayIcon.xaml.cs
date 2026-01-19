@@ -22,7 +22,9 @@ public partial class TrayIcon : TaskbarIcon
 
     private void UpdateTrayIcon(ApplicationTheme theme)
     {
-        string iconFileName = theme == ApplicationTheme.Dark ? "AppIcon_Dark.ico" : "AppIcon_Light.ico";
+        string iconFileName = theme == ApplicationTheme.Dark
+            ? "AppIcon_Dark.ico"
+            : "AppIcon_Light.ico";
         try
         {
             var iconUri = new Uri($"pack://application:,,,/Assets/{iconFileName}", UriKind.Absolute);

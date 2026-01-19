@@ -55,10 +55,10 @@ public class ProxyService : IProxyService
             key.SetValue("ProxyServer", enable ? address : "", RegistryValueKind.String);
 
             // 刷新系统设置并收取返回值
-            int result1 = NativeMethods.InternetSetOption(IntPtr.Zero, NativeMethods.INTERNET_OPTION_SETTINGS_CHANGED, IntPtr.Zero, 0);
-            int result2 = NativeMethods.InternetSetOption(IntPtr.Zero, NativeMethods.INTERNET_OPTION_REFRESH, IntPtr.Zero, 0);
+            bool result1 = NativeMethods.InternetSetOption(IntPtr.Zero, NativeMethods.INTERNET_OPTION_SETTINGS_CHANGED, IntPtr.Zero, 0);
+            bool result2 = NativeMethods.InternetSetOption(IntPtr.Zero, NativeMethods.INTERNET_OPTION_REFRESH, IntPtr.Zero, 0);
 
-            if (result1 == 0 || result2 == 0)
+            if (result1 == false || result2 == false)
             {
                 // 获取具体的 Win32 错误代码
                 int errorCode = Marshal.GetLastPInvokeError();

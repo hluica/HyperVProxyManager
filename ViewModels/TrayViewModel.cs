@@ -64,7 +64,7 @@ public partial class TrayViewModel : ObservableObject
     [RelayCommand]
     private async Task OnDisableProxy()
     {
-        _proxyService.DisableSystemProxy();
+        _ = _proxyService.DisableSystemProxy();
         await _store.RefreshAsync();
     }
 
@@ -78,10 +78,10 @@ public partial class TrayViewModel : ObservableObject
         if (mainWindow.WindowState == WindowState.Minimized)
             mainWindow.WindowState = WindowState.Normal;
 
-        mainWindow.Activate();
+        _ = mainWindow.Activate();
         mainWindow.Topmost = true;
         mainWindow.Topmost = false;
-        mainWindow.Focus();
+        _ = mainWindow.Focus();
     }
 
     [RelayCommand]

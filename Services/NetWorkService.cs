@@ -26,8 +26,7 @@ public class NetworkService : INetworkService
 
                 var ipProperties = hyperVInterface.GetIPProperties();
                 var gateway = ipProperties?.GatewayAddresses
-                    .FirstOrDefault(ga =>
-                        ga.Address.AddressFamily == AddressFamily.InterNetwork);
+                    .FirstOrDefault(ga => ga.Address.AddressFamily == AddressFamily.InterNetwork);
 
                 return gateway?.Address.ToString();
             }
