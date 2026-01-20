@@ -1,12 +1,12 @@
 ﻿using System.Windows;
 
-using Microsoft.Extensions.DependencyInjection;
-
 using HyperVProxyManager.Services;
 using HyperVProxyManager.Services.Interfaces;
 using HyperVProxyManager.Tray;
 using HyperVProxyManager.ViewModels;
 using HyperVProxyManager.Views;
+
+using Microsoft.Extensions.DependencyInjection;
 
 namespace HyperVProxyManager;
 
@@ -102,7 +102,7 @@ public partial class App : Application
         {
             while (true)
             {
-                _eventWaitHandle.WaitOne();
+                _ = _eventWaitHandle.WaitOne();
                 Dispatcher.Invoke(() =>
                 {
                     // 收到信号唤醒主窗口

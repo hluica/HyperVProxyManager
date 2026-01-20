@@ -1,8 +1,11 @@
 ﻿using System.Windows;
+
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+
 using HyperVProxyManager.Services.Interfaces;
 using HyperVProxyManager.Views;
+
 using Microsoft.Extensions.DependencyInjection;
 
 namespace HyperVProxyManager.ViewModels;
@@ -56,7 +59,7 @@ public partial class TrayViewModel : ObservableObject
 
         if (!string.IsNullOrEmpty(_store.HostIpAddress) && !_store.HostIpAddress.Contains("未检测"))
         {
-            _proxyService.SetSystemProxy($"{_store.HostIpAddress}:7890");
+            _ = _proxyService.SetSystemProxy($"{_store.HostIpAddress}:7890");
             await _store.RefreshAsync();
         }
     }

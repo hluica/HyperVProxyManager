@@ -66,7 +66,9 @@
                 </Grid>
             </ui:Card>
 
-            <Separator Margin="2,3" />
+            <Separator
+                Margin="2,3"
+                BorderBrush="{ui:ThemeResource TextFillColorTertiaryBrush}" />
 
             <!--  操作按钮  -->
             <ui:Button
@@ -95,7 +97,9 @@
                 禁用代理
             </ui:Button>
 
-            <Separator Margin="2,3" />
+            <Separator
+                Margin="2,3"
+                BorderBrush="{ui:ThemeResource TextFillColorTertiaryBrush}" />
 
             <!--  系统操作  -->
             <ui:Button

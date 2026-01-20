@@ -4,7 +4,8 @@
 public record ProxyState
 {
     public bool IsEnabled { get; init; }
-    public string ServerAddress { get; init; } = string.Empty;
+    public string ServerAddress { get; init; }
+        = string.Empty;
 
     public static ProxyState Empty
         => new() { IsEnabled = false, ServerAddress = "未设置" };
