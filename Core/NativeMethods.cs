@@ -25,7 +25,16 @@ internal static partial class NativeMethods
 
     // --- User32.dll ---
 
+    public static readonly IntPtr HWND_TOP = new(0);
+    public static readonly IntPtr HWND_TOPMOST = new(-1);
+
     public const uint MONITOR_DEFAULTTONEAREST = 2;
+    public const uint SWP_NOSIZE = 0x0001;
+    public const uint SWP_NOMOVE = 0x0002;
+    public const uint SWP_NOZORDER = 0x0004;
+    public const uint SWP_NOREDRAW = 0x0008;
+    public const uint SWP_NOACTIVATE = 0x0010;
+    public const uint SWP_SHOWWINDOW = 0x0040;
 
     [StructLayout(LayoutKind.Sequential)]
     public struct POINT
@@ -66,6 +75,17 @@ internal static partial class NativeMethods
     [LibraryImport("user32.dll", SetLastError = true)]
     [return: MarshalAs(UnmanagedType.Bool)]
     public static partial bool SetForegroundWindow(IntPtr hWnd);
+
+    [LibraryImport("user32.dll", SetLastError = true)]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    public static partial bool SetWindowPos(
+        IntPtr hWnd,
+        IntPtr hWndInsertAfter,
+        int X,
+        int Y,
+        int cx,
+        int cy,
+        uint uFlags);
 
     // --- SHCore.dll ---
 

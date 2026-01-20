@@ -8,8 +8,11 @@
     ResizeMode="NoResize"
     ShowInTaskbar="False"
     SizeToContent="Height"
+    SnapsToDevicePixels="True"
     Topmost="True"
+    UseLayoutRounding="True"
     Visibility="Collapsed"
+    WindowStartupLocation="Manual"
     WindowStyle="SingleBorderWindow">
 
     <WindowChrome.WindowChrome>

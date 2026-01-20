@@ -11,6 +11,8 @@
     MaxHeight="460"
     ExtendsContentIntoTitleBar="True"
     ResizeMode="CanResize"
+    SnapsToDevicePixels="True"
+    UseLayoutRounding="True"
     WindowBackdropType="Mica"
     WindowStartupLocation="CenterScreen">
 
