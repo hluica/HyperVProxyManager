@@ -14,7 +14,7 @@ public partial class App : Application
 {
     public static IServiceProvider? ServiceProvider { get; private set; }
 
-    private const string AppUniqueName = "HyperVProxyManager_Singleton_Mutex_V1";
+    private const string APP_UNIQUE_NAME = "HyperVProxyManager_Singleton_Mutex_V1";
     private static Mutex? _mutex;
     private static EventWaitHandle? _eventWaitHandle;
 
@@ -77,7 +77,7 @@ public partial class App : Application
 
     private static bool TryAcquireSingleton()
     {
-        _mutex = new Mutex(true, AppUniqueName, out bool isNewInstance);
+        _mutex = new Mutex(true, APP_UNIQUE_NAME, out bool isNewInstance);
         return isNewInstance;
     }
 
@@ -88,7 +88,7 @@ public partial class App : Application
     {
         try
         {
-            using var handle = EventWaitHandle.OpenExisting(AppUniqueName + "_Signal");
+            using var handle = EventWaitHandle.OpenExisting(APP_UNIQUE_NAME + "_Signal");
             _ = handle.Set();
         }
         catch { }
@@ -96,7 +96,7 @@ public partial class App : Application
 
     private void StartSignalListener()
     {
-        _eventWaitHandle = new EventWaitHandle(false, EventResetMode.AutoReset, AppUniqueName + "_Signal");
+        _eventWaitHandle = new EventWaitHandle(false, EventResetMode.AutoReset, APP_UNIQUE_NAME + "_Signal");
 
         _ = Task.Factory.StartNew(() =>
         {

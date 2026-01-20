@@ -12,13 +12,13 @@ namespace HyperVProxyManager.Services;
 
 public class ProxyService : IProxyService
 {
-    private const string RegistryKeyPath = @"Software\Microsoft\Windows\CurrentVersion\Internet Settings";
+    private const string REGISTRY_KEY_PATH = @"Software\Microsoft\Windows\CurrentVersion\Internet Settings";
 
     public ProxyState GetSystemProxy()
     {
         try
         {
-            using var key = Registry.CurrentUser.OpenSubKey(RegistryKeyPath, false);
+            using var key = Registry.CurrentUser.OpenSubKey(REGISTRY_KEY_PATH, false);
             if (key == null)
                 return ProxyState.Empty;
 
@@ -47,7 +47,7 @@ public class ProxyService : IProxyService
     {
         try
         {
-            using var key = Registry.CurrentUser.CreateSubKey(RegistryKeyPath);
+            using var key = Registry.CurrentUser.CreateSubKey(REGISTRY_KEY_PATH);
             if (key == null)
                 return new OperationResult(false, "无法创建或打开注册表项");
 
