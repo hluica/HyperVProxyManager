@@ -11,21 +11,20 @@ namespace HyperVProxyManager.Services;
 public class SettingsService : ISettingsService
 {
     private const string CONFIG_FILE_NAME = "config.ini";
+    static readonly string _fileDir = Path.GetDirectoryName(Environment.ProcessPath) ?? AppContext.BaseDirectory;
+    static readonly string _filePath = Path.Combine(_fileDir, CONFIG_FILE_NAME);
 
     public AppConfig Config { get; } = new();
 
     public void Load()
     {
-        string fileDir = Path.GetDirectoryName(Environment.ProcessPath) ?? AppContext.BaseDirectory;
-        string filePath = Path.Combine(fileDir, CONFIG_FILE_NAME);
-
-        if (!File.Exists(filePath))
+        if (!File.Exists(_filePath))
             return; // 文件不存在，保持内存中的默认值
 
         try
         {
             var builder = new ConfigurationBuilder()
-                .SetBasePath(fileDir)
+                .SetBasePath(_fileDir)
                 .AddIniFile(CONFIG_FILE_NAME, optional: true, reloadOnChange: false);
 
             var root = builder.Build();
@@ -67,7 +66,6 @@ public class SettingsService : ISettingsService
             ? Config.ProxyPort
             : AppConfig.DEFAULT_PORT;
 
-        string filePath = Path.Combine(AppContext.BaseDirectory, CONFIG_FILE_NAME);
         var sb = new StringBuilder();
         _ = sb
             .AppendLine($"use_external_config={(Config.UseExternalConfig ? 1 : 0)}")
@@ -75,7 +73,7 @@ public class SettingsService : ISettingsService
 
         try
         {
-            File.WriteAllText(filePath, sb.ToString(), Encoding.UTF8);
+            File.WriteAllText(_filePath, sb.ToString(), Encoding.UTF8);
         }
         catch
         { /* 忽略写入错误 */ }

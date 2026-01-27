@@ -8,6 +8,7 @@
     <UseWPF>true</UseWPF>
 
     <Version>1.5.1</Version>
+    <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
 
     <ApplicationIcon>Assets\AppIcon_Light.ico</ApplicationIcon>
     <ApplicationManifest>app.manifest</ApplicationManifest>
