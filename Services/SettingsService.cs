@@ -1,7 +1,9 @@
 ﻿using System.IO;
 using System.Text;
+
 using HyperVProxyManager.Models;
 using HyperVProxyManager.Services.Interfaces;
+
 using Microsoft.Extensions.Configuration;
 
 namespace HyperVProxyManager.Services;
@@ -14,7 +16,8 @@ public class SettingsService : ISettingsService
 
     public void Load()
     {
-        string filePath = Path.Combine(AppContext.BaseDirectory, CONFIG_FILE_NAME);
+        string fileDir = Path.GetDirectoryName(Environment.ProcessPath) ?? AppContext.BaseDirectory;
+        string filePath = Path.Combine(fileDir, CONFIG_FILE_NAME);
 
         if (!File.Exists(filePath))
             return; // 文件不存在，保持内存中的默认值
@@ -22,7 +25,7 @@ public class SettingsService : ISettingsService
         try
         {
             var builder = new ConfigurationBuilder()
-                .SetBasePath(AppContext.BaseDirectory)
+                .SetBasePath(fileDir)
                 .AddIniFile(CONFIG_FILE_NAME, optional: true, reloadOnChange: false);
 
             var root = builder.Build();
@@ -55,7 +58,7 @@ public class SettingsService : ISettingsService
             }
         }
         catch
-        { /* 读取出错时忽略，使用默认值 */ }
+        { /* 忽略读取错误 */ }
     }
 
     public void Save()

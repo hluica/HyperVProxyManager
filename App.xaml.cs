@@ -75,12 +75,12 @@ public partial class App : Application
             .AddSingleton<IProxyStateStore, ProxyStateStore>()
             .AddSingleton<ITrayService, TrayService>()
             .AddSingleton<ISettingsService, SettingsService>()
-            .AddTransient<MainWindowViewModel>()
-            .AddTransient<DashboardViewModel>()
-            .AddTransient<SettingsViewModel>()
-            .AddTransient<TrayViewModel>()
-            .AddTransient<MainWindow>()
-            .AddTransient<TrayMenuWindow>();
+            .AddSingleton<MainWindowViewModel>()
+            .AddSingleton<DashboardViewModel>()
+            .AddSingleton<SettingsViewModel>()
+            .AddSingleton<TrayViewModel>()
+            .AddSingleton<MainWindow>()
+            .AddSingleton<TrayMenuWindow>();
 
         return services.BuildServiceProvider();
     }

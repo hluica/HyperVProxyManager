@@ -16,7 +16,10 @@ public partial class TrayViewModel : ObservableObject
     private readonly IProxyService _proxyService;
     private readonly IServiceProvider _serviceProvider;
 
-    public TrayViewModel(IProxyStateStore store, IProxyService proxyService, IServiceProvider serviceProvider)
+    public TrayViewModel(
+        IProxyStateStore store,
+        IProxyService proxyService,
+        IServiceProvider serviceProvider)
     {
         _store = store;
         _proxyService = proxyService;
@@ -38,8 +41,8 @@ public partial class TrayViewModel : ObservableObject
 
     public bool CanQuickSet
         => !HostIpAddress.Contains("未检测")
-            && !HostIpAddress.Contains("正在检测")
-            && !IsProxyEnabled;
+        && !HostIpAddress.Contains("正在检测")
+        && !IsProxyEnabled;
 
     public string ProxyStatusText
         => _store.CurrentProxy.IsEnabled
@@ -54,7 +57,6 @@ public partial class TrayViewModel : ObservableObject
     private async Task OnQuickSet()
     {
         if (string.IsNullOrEmpty(_store.HostIpAddress) || _store.HostIpAddress.Contains("检测"))
-            // 如果 Store 还没数据，先刷新一次
             await _store.RefreshAsync();
 
         if (!string.IsNullOrEmpty(_store.HostIpAddress) && !_store.HostIpAddress.Contains("未检测"))

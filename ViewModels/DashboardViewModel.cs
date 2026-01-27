@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+
 using HyperVProxyManager.Services.Interfaces;
 
 namespace HyperVProxyManager.ViewModels;
@@ -27,8 +28,8 @@ public partial class DashboardViewModel : ObservableObject
             OnPropertyChanged(nameof(CurrentProxyAddress));
         };
 
-        _settingsService.Config.PropertyChanged += (s, e)
-            => OnPropertyChanged(nameof(TargetPort));
+        _settingsService.Config.PropertyChanged += (s, e) =>
+            OnPropertyChanged(nameof(TargetPort));
     }
 
     [ObservableProperty]

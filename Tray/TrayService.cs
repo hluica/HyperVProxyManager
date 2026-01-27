@@ -1,8 +1,8 @@
 ﻿using System.Windows;
 
-using Microsoft.Extensions.DependencyInjection;
-
 using HyperVProxyManager.Views;
+
+using Microsoft.Extensions.DependencyInjection;
 
 namespace HyperVProxyManager.Tray;
 

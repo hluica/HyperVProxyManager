@@ -5,7 +5,6 @@ using HyperVProxyManager.Services.Interfaces;
 
 namespace HyperVProxyManager.Services;
 
-
 public class NetworkService : INetworkService
 {
     public async Task<string?> GetHyperVHostIpAsync()
@@ -15,11 +14,10 @@ public class NetworkService : INetworkService
             try
             {
                 var hyperVInterface = NetworkInterface.GetAllNetworkInterfaces()
-                    .FirstOrDefault(ni =>
-                        ni.NetworkInterfaceType != NetworkInterfaceType.Loopback
+                    .FirstOrDefault(ni
+                        => ni.NetworkInterfaceType != NetworkInterfaceType.Loopback
                         && ni.OperationalStatus == OperationalStatus.Up
-                        && (ni.Description.Contains("Microsoft Hyper-V Network Adapter")
-                            || ni.Description.Contains("Hyper-V Virtual Ethernet Adapter")));
+                        && ni.Description.Contains("Microsoft Hyper-V Network Adapter"));
 
                 if (hyperVInterface == null)
                     return null;

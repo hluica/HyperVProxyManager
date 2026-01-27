@@ -20,6 +20,7 @@
                 Appearance="Secondary"
                 Command="{Binding GoBackCommand}"
                 Icon="{ui:SymbolIcon ArrowLeft24}" />
+
             <TextBlock
                 Margin="12,0,0,0"
                 VerticalAlignment="Center"
@@ -39,6 +40,7 @@
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
+
                         <StackPanel
                             Grid.Column="0"
                             VerticalAlignment="Center">
@@ -46,11 +48,13 @@
                                 FontSize="14"
                                 FontWeight="Medium"
                                 Text="自定义配置" />
+
                             <TextBlock
                                 FontSize="12"
                                 Foreground="{ui:ThemeResource TextFillColorSecondaryBrush}"
                                 Text="是否从外部 config.ini 读取代理端口配置" />
                         </StackPanel>
+
                         <!--  Header 开关  -->
                         <ui:ToggleSwitch
                             Grid.Column="1"
@@ -69,6 +73,7 @@
                         Grid.Column="0"
                         VerticalAlignment="Center">
                         <TextBlock Text="代理端口" />
+
                         <TextBlock
                             FontSize="12"
                             Foreground="{ui:ThemeResource TextFillColorSecondaryBrush}"

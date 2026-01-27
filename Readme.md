@@ -33,15 +33,18 @@
     - 当宿主机的代理提供程序支持局域网连接时，虚拟机可以设置其代理服务器为宿主机的虚拟局域网地址，从而实现代理功能。
     - 本工具通过修改注册表来设置或禁用代理，通过 `wininet.dll` 的 [InternetSetOptionW](https://learn.microsoft.com/en-us/windows/win32/api/wininet/nf-wininet-internetsetoptionw) 函数通知系统代理设置更改。
  - UI 绘制
-    - 主界面继承自 `Wpf.Ui.Controls.FluentWindow` 类，原生支持 Mica 效果和 WinUI 3 风格 UI 控件；
+    - 主界面继承自 `Wpf.Ui.Controls.FluentWindow` 类，原生支持 Mica 效果和 WinUI 3 风格 UI 控件；通过将窗口扩展至标题栏，实现对标题栏的完全自定义。
     - 系统托盘图标继承自 `Hardcodet.Wpf.TaskbarNotification.TaskbarIcon` 类，但仅用于控制图标的表现
-    - 实际托盘菜单为自定义窗口，通过继承 `System.Windows.Window` 类并使用 WPF-UI控件，实现现代化且生命周期独立的菜单窗口。其目的是使托盘菜单和主界面的生命周期解耦，在后台启动时托盘菜单可以独立运行。
+    - 实际托盘菜单为自定义窗口，通过继承 `System.Windows.Window` 类并使用 WPF-UI 控件，实现现代化且生命周期独立的菜单窗口。其目的是使托盘菜单和主界面的生命周期解耦，在后台启动时托盘菜单可以独立运行。
         - 通过组合使用 `SingleBorderWindow` 的窗口设置和 `WindowChrome` 类，将窗口控件完全隐藏的同时保留阴影效果；
         - 通过调用 `User32.dll`、`SHCore.dll` 中的函数，手动设置托盘菜单的位置，并考虑到 HiDPI 和屏幕缩放的影响。
+- 配置持久化
+    - 使用 [Microsoft.Extensions.Configuration.Ini](https://learn.microsoft.com/en-us/dotnet/core/extensions/configuration-providers#ini-configuration-provider) 库加载和保存外部配置文件 `config.ini`，实现配置持久化。
+    - 默认配置被硬编码于程序之中，当外部配置文件缺失或配置项不合法时，将使用默认配置。
+    - 程序退出时，会将当前配置保存到外部配置文件中，并覆盖原有配置文件的所有内容。
 
 ## 注意事项
 
-- 当前，本工具不允许修改手动修改代理服务器地址或端口。
 - 仅支持 IPv4，不支持 IPv6。
 - 本工具虽为单文件发布，但未包含运行时，需自行安装 .NET 10 桌面运行时。
 
@@ -77,6 +80,11 @@
 - v1.4.4 更新依赖。
     - WPF-UI: 4.1.0 -> 4.2.0；
     - Microsoft.Extensions.DependencyInjection: 10.0.1 -> 10.0.2。
+- v1.5.0 增加外部配置和设置页面，允许用户自定义代理服务器端口。
+- v1.5.1 更改外部配置文件的定位方法，解决单文件打包时配置文件被生成在%Temp%目录下的问题。
+
+> [!Warning]
+> 由于未确认的 WPF-UI 的 Bug，其更新到 4.2.0 版本后将无法启用跟随系统颜色主题的功能。
 
 ## 许可
 [MIT 许可证](LICENSE)
