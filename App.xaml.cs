@@ -34,16 +34,19 @@ public partial class App : Application
 
         ServiceProvider = BuildServiceProvider();
 
-        // 1. 初始化托盘服务 (这是必须的，无论是否静默启动)
+        // 1. 加载配置
+        var settings = ServiceProvider.GetRequiredService<ISettingsService>();
+        settings.Load();
+
+        // 2. 初始化托盘服务
         _trayService = ServiceProvider.GetRequiredService<ITrayService>();
         _trayService.Initialize();
 
-        // 2. 根据参数决定是否显示主窗口
+        // 3. 根据参数决定是否显示主窗口
         bool startInBackground = ShouldStartInBackground(e.Args);
 
         if (!startInBackground)
         {
-            // 只有需要显示时才解析 MainWindow，避免后台启动时的闪烁
             var window = ServiceProvider.GetRequiredService<MainWindow>();
             window.Show();
         }
@@ -51,7 +54,12 @@ public partial class App : Application
 
     protected override void OnExit(ExitEventArgs e)
     {
-        _trayService?.Shutdown(); // 清理托盘资源
+        // 1. 保存配置
+        var settings = ServiceProvider?.GetService<ISettingsService>();
+        settings?.Save();
+
+        // 2. 清理资源
+        _trayService?.Shutdown();
         _mutex?.ReleaseMutex();
         _mutex?.Dispose();
         base.OnExit(e);
@@ -66,10 +74,13 @@ public partial class App : Application
             .AddSingleton<IProxyService, ProxyService>()
             .AddSingleton<IProxyStateStore, ProxyStateStore>()
             .AddSingleton<ITrayService, TrayService>()
-            .AddTransient<MainViewModel>()
+            .AddSingleton<ISettingsService, SettingsService>()
+            .AddTransient<MainWindowViewModel>()
+            .AddTransient<DashboardViewModel>()
+            .AddTransient<SettingsViewModel>()
             .AddTransient<TrayViewModel>()
-            .AddSingleton<MainWindow>()
-            .AddSingleton<TrayMenuWindow>();
+            .AddTransient<MainWindow>()
+            .AddTransient<TrayMenuWindow>();
 
         return services.BuildServiceProvider();
     }
@@ -117,7 +128,6 @@ public partial class App : Application
                     }
                 });
             }
-        },
-        TaskCreationOptions.LongRunning);
+        }, TaskCreationOptions.LongRunning);
     }
 }

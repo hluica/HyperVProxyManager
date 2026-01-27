@@ -1,19 +1,23 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-
 using HyperVProxyManager.Services.Interfaces;
 
 namespace HyperVProxyManager.ViewModels;
 
-public partial class MainViewModel : ObservableObject
+public partial class DashboardViewModel : ObservableObject
 {
     private readonly IProxyStateStore _store;
     private readonly IProxyService _proxyService;
+    private readonly ISettingsService _settingsService;
 
-    public MainViewModel(IProxyStateStore store, IProxyService proxyService)
+    public DashboardViewModel(
+        IProxyStateStore store,
+        IProxyService proxyService,
+        ISettingsService settingsService)
     {
         _store = store;
         _proxyService = proxyService;
+        _settingsService = settingsService;
 
         _store.PropertyChanged += (s, e) =>
         {
@@ -22,7 +26,13 @@ public partial class MainViewModel : ObservableObject
             OnPropertyChanged(nameof(CanQuickSet));
             OnPropertyChanged(nameof(CurrentProxyAddress));
         };
+
+        _settingsService.Config.PropertyChanged += (s, e)
+            => OnPropertyChanged(nameof(TargetPort));
     }
+
+    [ObservableProperty]
+    private string _statusMessage = "就绪";
 
     public string HostIpAddress
         => _store.HostIpAddress;
@@ -32,17 +42,16 @@ public partial class MainViewModel : ObservableObject
 
     public bool CanQuickSet
         => !HostIpAddress.Contains("未检测")
-            && !HostIpAddress.Contains("正在检测")
-            && !IsProxyEnabled;
+        && !HostIpAddress.Contains("正在检测")
+        && !IsProxyEnabled;
 
     public string CurrentProxyAddress
         => _store.CurrentProxy.IsEnabled
             ? _store.CurrentProxy.ServerAddress
             : "未启用";
 
-    // 依然保留一个 UI 状态属性
-    [ObservableProperty]
-    private string _statusMessage = "就绪";
+    public int TargetPort
+        => _settingsService.Config.ProxyPort;
 
     [RelayCommand]
     private async Task OnLoaded()
@@ -54,8 +63,6 @@ public partial class MainViewModel : ObservableObject
         StatusMessage = "正在刷新...";
         await _store.RefreshAsync();
         StatusMessage = "刷新完成";
-
-        // 强制通知 CanQuickSet 更新
         OnPropertyChanged(nameof(CanQuickSet));
     }
 
@@ -65,7 +72,9 @@ public partial class MainViewModel : ObservableObject
         if (!CanQuickSet)
             return;
 
-        string targetProxy = $"{HostIpAddress}:7890";
+        // 使用 SettingsService 中的端口配置
+        string targetProxy = $"{HostIpAddress}:{TargetPort}";
+
         var result = _proxyService.SetSystemProxy(targetProxy);
         StatusMessage = result.Message;
 

@@ -1,9 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-
 using HyperVProxyManager.ViewModels;
-
 using Wpf.Ui.Appearance;
 using Wpf.Ui.Controls;
 
@@ -11,7 +9,7 @@ namespace HyperVProxyManager.Views;
 
 public partial class MainWindow : FluentWindow
 {
-    public MainWindow(MainViewModel viewModel)
+    public MainWindow(MainWindowViewModel viewModel)
     {
         DataContext = viewModel;
         InitializeComponent();
@@ -23,8 +21,8 @@ public partial class MainWindow : FluentWindow
 
     protected override void OnClosing(CancelEventArgs e)
     {
-        e.Cancel = true; // 阻止销毁
-        Hide();          // 仅隐藏
+        e.Cancel = true;
+        Hide();
     }
 
     private void OnThemeChanged(ApplicationTheme currentTheme, Color systemAccent)
@@ -40,6 +38,6 @@ public partial class MainWindow : FluentWindow
             var iconUri = new Uri($"pack://application:,,,/Assets/{iconFileName}", UriKind.Absolute);
             Icon = new BitmapImage(iconUri);
         }
-        catch { /* 忽略资源加载错误 */ }
+        catch { }
     }
 }
