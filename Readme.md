@@ -86,5 +86,9 @@
 > [!Warning]
 > 由于未确认的 WPF-UI 的 Bug，其更新到 4.2.0 版本后将无法启用跟随系统颜色主题的功能。
 
+- v1.5.2 更新依赖
+    - Microsoft.Extensions.Configuration.Ini: 10.0.2 -> 10.0.3；
+    - Microsoft.Extensions.DependencyInjection: 10.0.2 -> 10.0.3。
+
 ## 许可
-[MIT 许可证](LICENSE)
+[MIT](LICENSE)
