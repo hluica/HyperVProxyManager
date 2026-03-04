@@ -15,10 +15,10 @@ internal static partial class NativeMethods
     [LibraryImport("wininet.dll", EntryPoint = "InternetSetOptionW", SetLastError = true)]
     [return: MarshalAs(UnmanagedType.Bool)]
     public static partial bool InternetSetOption(
-         IntPtr hInternet,
-         int dwOption,
-         IntPtr lpBuffer,
-         int dwBufferLength);
+        IntPtr hInternet,
+        int dwOption,
+        IntPtr lpBuffer,
+        int dwBufferLength);
 
     // --- User32.dll ---
 

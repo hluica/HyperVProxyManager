@@ -80,12 +80,12 @@
 - v1.4.4 更新依赖。
     - WPF-UI: 4.1.0 -> 4.2.0；
     - Microsoft.Extensions.DependencyInjection: 10.0.1 -> 10.0.2。
-- v1.5.0 增加外部配置和设置页面，允许用户自定义代理服务器端口。
-- v1.5.1 更改外部配置文件的定位方法，解决单文件打包时配置文件被生成在%Temp%目录下的问题。
 
 > [!Warning]
 > 由于未确认的 WPF-UI 的 Bug，其更新到 4.2.0 版本后将无法启用跟随系统颜色主题的功能。
 
+- v1.5.0 增加外部配置和设置页面，允许用户自定义代理服务器端口。
+- v1.5.1 更改外部配置文件的定位方法，解决单文件打包时配置文件被生成在%Temp%目录下的问题。
 - v1.5.2 更新依赖
     - Microsoft.Extensions.Configuration.Ini: 10.0.2 -> 10.0.3；
     - Microsoft.Extensions.DependencyInjection: 10.0.2 -> 10.0.3。
