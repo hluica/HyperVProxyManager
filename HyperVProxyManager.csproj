@@ -16,7 +16,7 @@
     <PublishSingleFile>true</PublishSingleFile>
     <SelfContained>false</SelfContained>
     <IncludeAllContentForSelfExtract>true</IncludeAllContentForSelfExtract>
-    <PublishTrimmed>false</PublishTrimmed>
+    <PublishReadyToRun>true</PublishReadyToRun>
 
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
