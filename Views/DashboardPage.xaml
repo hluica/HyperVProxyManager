@@ -61,12 +61,36 @@
                         Foreground="{ui:ThemeResource TextFillColorSecondaryBrush}"
                         Text="宿主机 IPv4" />
 
-                    <TextBlock
+                    <Grid
                         Grid.Row="2"
-                        FontSize="24"
-                        FontWeight="SemiBold"
-                        Text="{Binding HostIpAddress}"
-                        TextWrapping="Wrap" />
+                        HorizontalAlignment="Left">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock
+                            Grid.Column="0"
+                            VerticalAlignment="Center"
+                            FontSize="24"
+                            FontWeight="SemiBold"
+                            Text="{Binding HostIpAddress}"
+                            TextWrapping="Wrap" />
+
+                        <ui:Button
+                            Grid.Column="1"
+                            Margin="8,0,0,0"
+                            Padding="6"
+                            VerticalAlignment="Center"
+                            Appearance="Transparent"
+                            Click="OnCopyContentButtonClick"
+                            Tag="{Binding HostIpAddress}">
+                            <ui:SymbolIcon
+                                FontSize="20"
+                                Foreground="{ui:ThemeResource TextFillColorSecondaryBrush}"
+                                Symbol="Copy24" />
+                        </ui:Button>
+                    </Grid>
                 </Grid>
             </ui:Card>
 
@@ -115,12 +139,36 @@
                         Foreground="{ui:ThemeResource TextFillColorSecondaryBrush}"
                         Text="当前系统代理" />
 
-                    <TextBlock
+                    <Grid
                         Grid.Row="2"
-                        FontSize="24"
-                        FontWeight="SemiBold"
-                        Text="{Binding CurrentProxyAddress}"
-                        TextWrapping="Wrap" />
+                        HorizontalAlignment="Left">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock
+                            Grid.Column="0"
+                            VerticalAlignment="Center"
+                            FontSize="24"
+                            FontWeight="SemiBold"
+                            Text="{Binding CurrentProxyAddress}"
+                            TextWrapping="Wrap" />
+
+                        <ui:Button
+                            Grid.Column="1"
+                            Margin="8,0,0,0"
+                            Padding="6"
+                            VerticalAlignment="Center"
+                            Appearance="Transparent"
+                            Click="OnCopyContentButtonClick"
+                            Tag="{Binding CurrentProxyAddress}">
+                            <ui:SymbolIcon
+                                FontSize="20"
+                                Foreground="{ui:ThemeResource TextFillColorSecondaryBrush}"
+                                Symbol="Copy24" />
+                        </ui:Button>
+                    </Grid>
                 </Grid>
             </ui:Card>
 
