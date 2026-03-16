@@ -1,7 +1,7 @@
 ﻿using System.Runtime.InteropServices;
 using System.Security;
 
-using HyperVProxyManager.Core;
+using HyperVProxyManager.Utils;
 using HyperVProxyManager.Models;
 using HyperVProxyManager.Services.Interfaces;
 

@@ -2,7 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 
-using HyperVProxyManager.Core;
+using HyperVProxyManager.Utils;
 using HyperVProxyManager.Services.Interfaces;
 
 namespace HyperVProxyManager.ViewModels;

@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Data;
 
-namespace HyperVProxyManager.Core;
+namespace HyperVProxyManager.Utils;
 
 public class BooleanToVisibilityConverter : IValueConverter
 {

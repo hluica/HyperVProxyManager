@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Interop;
 
-using HyperVProxyManager.Core;
+using HyperVProxyManager.Utils;
 using HyperVProxyManager.ViewModels;
 
 using Wpf.Ui.Appearance;

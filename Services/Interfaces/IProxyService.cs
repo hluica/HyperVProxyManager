@@ -1,4 +1,4 @@
-﻿using HyperVProxyManager.Core;
+﻿using HyperVProxyManager.Utils;
 using HyperVProxyManager.Models;
 
 namespace HyperVProxyManager.Services.Interfaces;

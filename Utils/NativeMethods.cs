@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace HyperVProxyManager.Core;
+namespace HyperVProxyManager.Utils;
 
 // 执行外部操作
 internal static partial class NativeMethods
