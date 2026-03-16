@@ -42,6 +42,7 @@
     - 使用 [Microsoft.Extensions.Configuration.Ini](https://learn.microsoft.com/en-us/dotnet/core/extensions/configuration-providers#ini-configuration-provider) 库加载和保存外部配置文件 `config.ini`，实现配置持久化。
     - 默认配置被硬编码于程序之中，当外部配置文件缺失或配置项不合法时，将使用默认配置。
     - 程序退出时，会将当前配置保存到外部配置文件中，并覆盖原有配置文件的所有内容。
+    - 读取和保存配置时的任何错误都会被忽略，目标是优先保证程序的正确运行。
 
 ## 注意事项
 
@@ -50,15 +51,17 @@
 
 > [!Warning]
 > 由于使用了 WPF-UI 并通过它开启了 Mica 效果，本程序已验证无法在 Windows 10 上运行。
+> 
+> 这不意味着是 WPF-UI 的错误，可能是本程序开发者缺乏相关的适配能力。
 
 ## 程序构建
 
 1. 自行下载安装 .NET 10 SDK。
 2. Clone 本仓库到本地，并 cd 到仓库根目录。
-3. 运行 `dotnet publish -c Release -r <ARCH> --sc false` 以发布不包含运行时的单文件应用程序。根据自身设备的CPU架构选择以下任意一项填入 `<ARCH>` 中：
-    - `win-x64`
-    - `win-x86`
-    - `win-arm64`
+3. 运行 `dotnet publish -c Release -r <ARCH>` 以发布不包含运行时的单文件应用程序。根据目标虚拟机的CPU架构选择以下任意一项填入 `<ARCH>` 中：
+    - `win-x64` 对于64位的 Windows 系统
+    - `win-x86` 对于32位的 Windows 系统
+    - `win-arm64` 对于 ARM64 架构的 Windows 系统
 4. 发布的文件位于 `bin\Release\net10.0-windows\<ARCH>\publish\` 目录下。
 
 ## 更新历史
@@ -89,6 +92,12 @@
 - v1.5.2 更新依赖
     - Microsoft.Extensions.Configuration.Ini: 10.0.2 -> 10.0.3；
     - Microsoft.Extensions.DependencyInjection: 10.0.2 -> 10.0.3。
+- v1.5.3
+    - 更新依赖
+        - Microsoft.Extensions.Configuration.Ini: 10.0.3 -> 10.0.5；
+        - Microsoft.Extensions.DependencyInjection: 10.0.3 -> 10.0.5；
+        - Microsoft.Xaml.Behaviors.Wpf: 1.1.135 -> 1.1.142。
+    - 更新用户界面：在主界面显示的两个IP地址附近增加复制按钮，以将其复制到剪贴板。
 
 ## 许可
 [MIT](LICENSE)
