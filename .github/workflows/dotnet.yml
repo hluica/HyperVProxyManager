@@ -38,7 +38,7 @@ jobs:
           New-Item -ItemType Directory -Force -Path $releaseDir
           
           foreach ($rt in $runtimes) {
-              $outDir = "./bin/Release/net10.0-windows/$rt/publish"
+              $outDir = "./bin/Release/net10.0-windows10.0.26100.0/$rt/publish"
               dotnet publish --configuration Release --runtime $rt
               $exeFile = Get-ChildItem -Path $outDir -Filter "*.exe" | Select-Object -First 1
           
