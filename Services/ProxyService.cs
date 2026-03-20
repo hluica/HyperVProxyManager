@@ -1,11 +1,13 @@
 ﻿using System.Runtime.InteropServices;
 using System.Security;
 
-using HyperVProxyManager.Utils;
 using HyperVProxyManager.Models;
 using HyperVProxyManager.Services.Interfaces;
+using HyperVProxyManager.Utils;
 
 using Microsoft.Win32;
+
+using Windows.Win32;
 
 namespace HyperVProxyManager.Services;
 
@@ -55,8 +57,25 @@ public class ProxyService : IProxyService
             key.SetValue("ProxyServer", enable ? address : "", RegistryValueKind.String);
 
             // 刷新系统设置并收取返回值
-            bool result1 = NativeMethods.InternetSetOption(IntPtr.Zero, NativeMethods.INTERNET_OPTION_SETTINGS_CHANGED, IntPtr.Zero, 0);
-            bool result2 = NativeMethods.InternetSetOption(IntPtr.Zero, NativeMethods.INTERNET_OPTION_REFRESH, IntPtr.Zero, 0);
+            bool result1;
+            bool result2;
+
+            unsafe
+            {
+                // default 作为 HINTERNET 句柄
+                // null 作为 void* 缓冲区指针
+                result1 = PInvoke.InternetSetOption(
+                    default,
+                    PInvoke.INTERNET_OPTION_SETTINGS_CHANGED,
+                    null,
+                    0);
+
+                result2 = PInvoke.InternetSetOption(
+                    default,
+                    PInvoke.INTERNET_OPTION_REFRESH,
+                    null,
+                    0);
+            }
 
             if (result1 == false || result2 == false)
             {

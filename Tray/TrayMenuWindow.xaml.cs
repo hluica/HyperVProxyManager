@@ -2,8 +2,13 @@
 using System.Windows;
 using System.Windows.Interop;
 
-using HyperVProxyManager.Utils;
 using HyperVProxyManager.ViewModels;
+
+using Windows.Win32;
+using Windows.Win32.Foundation;
+using Windows.Win32.Graphics.Gdi;
+using Windows.Win32.UI.HiDpi;
+using Windows.Win32.UI.WindowsAndMessaging;
 
 using Wpf.Ui.Appearance;
 
@@ -41,23 +46,23 @@ public partial class TrayMenuWindow : Window
         // --- 物理计算阶段开始 ---
 
         // 3. 获取鼠标物理坐标
-        if (!NativeMethods.GetCursorPos(out var pt))
+        if (!PInvoke.GetCursorPos(out var pt))
             return;
 
         // 4. 获取屏幕信息
-        nint hMonitor = NativeMethods.MonitorFromPoint(pt, NativeMethods.MONITOR_DEFAULTTONEAREST);
-        var monitorInfo = new NativeMethods.MONITORINFO
+        var hMonitor = PInvoke.MonitorFromPoint(pt, MONITOR_FROM_FLAGS.MONITOR_DEFAULTTONEAREST);
+        var monitorInfo = new MONITORINFO
         {
-            cbSize = Marshal.SizeOf<NativeMethods.MONITORINFO>()
+            cbSize = (uint)Marshal.SizeOf<MONITORINFO>()
         };
 
-        if (!NativeMethods.GetMonitorInfo(hMonitor, ref monitorInfo))
+        if (!PInvoke.GetMonitorInfo(hMonitor, ref monitorInfo))
             return;
 
         // 5. 获取精确 DPI
-        _ = NativeMethods.GetDpiForMonitor(
+        _ = PInvoke.GetDpiForMonitor(
             hMonitor,
-            NativeMethods.MonitorDpiType.EffectiveDpi,
+            MONITOR_DPI_TYPE.MDT_EFFECTIVE_DPI,
             out uint dpiX,
             out uint dpiY);
 
@@ -83,39 +88,38 @@ public partial class TrayMenuWindow : Window
         // --- 翻转与限制逻辑 ---
 
         // 水平翻转：如果右侧超出屏幕，放左边
-        if (targetLeft + winWidthPhys > mRect.Right)
+        if (targetLeft + winWidthPhys > mRect.right)
             targetLeft = cursorX - winWidthPhys;
 
         // 垂直翻转：如果上方超出屏幕，放下面
-        if (targetTop < mRect.Top)
+        if (targetTop < mRect.top)
             targetTop = cursorY;
 
         // Clamp 限制 (确保不跑出屏幕)
         // 左边界
-        targetLeft = Math.Max(mRect.Left, targetLeft);
+        targetLeft = Math.Max(mRect.left, targetLeft);
         // 右边界
-        if (targetLeft + winWidthPhys > mRect.Right)
-            targetLeft = mRect.Right - winWidthPhys;
+        if (targetLeft + winWidthPhys > mRect.right)
+            targetLeft = mRect.right - winWidthPhys;
 
         // 上边界
-        targetTop = Math.Max(mRect.Top, targetTop);
+        targetTop = Math.Max(mRect.top, targetTop);
 
         // 下边界
-        if (targetTop + winHeightPhys > mRect.Bottom)
-            targetTop = mRect.Bottom - winHeightPhys;
-
+        if (targetTop + winHeightPhys > mRect.bottom)
+            targetTop = mRect.bottom - winHeightPhys;
         // --- 应用位置阶段 ---
 
         // 8. 使用 SetWindowPos 进行原子化移动
         var helper = new WindowInteropHelper(this);
 
-        _ = NativeMethods.SetWindowPos(
-            helper.Handle,
-            NativeMethods.HWND_TOP, // Z序：放在顶部
+        _ = PInvoke.SetWindowPos(
+            new HWND(helper.Handle),
+            new HWND(0), // Z序：放在顶部
             targetLeft,
             targetTop,
             0, 0, // 忽略宽高设置，因为设置了 SWP_NOSIZE
-            NativeMethods.SWP_NOSIZE | NativeMethods.SWP_NOACTIVATE | NativeMethods.SWP_NOZORDER
+            SET_WINDOW_POS_FLAGS.SWP_NOSIZE | SET_WINDOW_POS_FLAGS.SWP_NOACTIVATE | SET_WINDOW_POS_FLAGS.SWP_NOZORDER
         );
 
         // 9. 显形与激活
@@ -123,7 +127,7 @@ public partial class TrayMenuWindow : Window
         Opacity = 1.0;
 
         // 强制前台激活
-        _ = NativeMethods.SetForegroundWindow(helper.Handle);
+        _ = PInvoke.SetForegroundWindow(new HWND(helper.Handle));
         _ = Activate();
         _ = Focus();
     }

@@ -1,0 +1,14 @@
+﻿// WinINet
+INTERNET_OPTION_SETTINGS_CHANGED
+INTERNET_OPTION_REFRESH
+InternetSetOptionW
+
+// User32
+GetCursorPos
+MonitorFromPoint
+GetMonitorInfo
+SetForegroundWindow
+SetWindowPos
+
+// SHCore
+GetDpiForMonitor
