@@ -24,7 +24,7 @@ public partial class TrayMenuWindow : Window
         SystemThemeWatcher.Watch(this);
 
         // 订阅 Deactivated 事件：失去焦点时隐藏窗口
-        Deactivated += (s, e) => Hide();
+        Deactivated += (_, _) => Hide();
     }
 
     public void ShowAtCursor()
@@ -59,12 +59,17 @@ public partial class TrayMenuWindow : Window
         if (!PInvoke.GetMonitorInfo(hMonitor, ref monitorInfo))
             return;
 
+# pragma warning disable CA1416
+
         // 5. 获取精确 DPI
+        // 由于本程序已验证无法在 Windows 11 以外的系统上运行，因此此处可以忽略平台兼容性警告 (CA1416)
         _ = PInvoke.GetDpiForMonitor(
             hMonitor,
             MONITOR_DPI_TYPE.MDT_EFFECTIVE_DPI,
             out uint dpiX,
             out uint dpiY);
+
+# pragma warning restore CA1416
 
         double scaleX = dpiX / 96.0;
         double scaleY = dpiY / 96.0;
@@ -96,18 +101,16 @@ public partial class TrayMenuWindow : Window
             targetTop = cursorY;
 
         // Clamp 限制 (确保不跑出屏幕)
-        // 左边界
+        // 左边界与右边界
         targetLeft = Math.Max(mRect.left, targetLeft);
-        // 右边界
         if (targetLeft + winWidthPhys > mRect.right)
             targetLeft = mRect.right - winWidthPhys;
 
-        // 上边界
+        // 上边界与下边界
         targetTop = Math.Max(mRect.top, targetTop);
-
-        // 下边界
         if (targetTop + winHeightPhys > mRect.bottom)
             targetTop = mRect.bottom - winHeightPhys;
+
         // --- 应用位置阶段 ---
 
         // 8. 使用 SetWindowPos 进行原子化移动

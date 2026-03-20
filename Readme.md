@@ -51,12 +51,6 @@
 
 > [!Warning]
 > 可能由于使用了 WPF-UI 并通过它开启了 Mica 效果，本程序已验证无法在 Windows 10 上运行。
->
-> 从版本 1.6.0 开始，本程序的目标运行环境已经全面提升：
-> - 最低可运行系统版本为 Windows 11 21H2 (内部版本 10.0.22000.0)；
-> - 推荐的运行系统版本为 Windows 11 24H2 (内部版本 10.0.26100.0)。
->
-> 版本更低的 Windows 将不再受到支持，上述已验证的异常现象也不会被修复。
 
 ## 程序构建
 
@@ -107,9 +101,7 @@
         - CommunityToolkit.Mvvm: 8.4.0 -> 8.4.1。
     - 使用 CsWin32 替代手动导入 Win32 API。
     - 使用 Partial Property 替代 Field，优化 CommunityToolkit.Mvvm 的 ObservableObjectAttribute 效果。
-    - 显式声明受支持的系统版本，完全放弃对Windows 11 以前全部系统的支持：
-        - TargetFramework: net10.0-windows10.0.26100.0
-        - SupportedOSPlatformVersion: 10.0.22000.0
+    - 对特定 Win32 API 抑制平台兼容性检查。
 
 ## 许可
 [MIT](LICENSE)
