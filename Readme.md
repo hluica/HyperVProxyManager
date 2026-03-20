@@ -50,9 +50,7 @@
 - 本工具虽为单文件发布，但未包含运行时，需自行安装 .NET 10 桌面运行时。
 
 > [!Warning]
-> 由于使用了 WPF-UI 并通过它开启了 Mica 效果，本程序已验证无法在 Windows 10 上运行。
-> 
-> 这不意味着是 WPF-UI 的错误，可能是本程序开发者缺乏相关的适配能力。
+> 可能由于使用了 WPF-UI 并通过它开启了 Mica 效果，本程序已验证无法在 Windows 10 上运行。
 
 ## 程序构建
 
@@ -98,6 +96,14 @@
         - Microsoft.Extensions.DependencyInjection: 10.0.3 -> 10.0.5；
         - Microsoft.Xaml.Behaviors.Wpf: 1.1.135 -> 1.1.142。
     - 更新用户界面：在主界面显示的两个IP地址附近增加复制按钮，以将其复制到剪贴板。
+- v1.6.0
+    - 更新依赖
+        - CommunityToolkit.Mvvm: 8.4.0 -> 8.4.1。
+    - 使用 CsWin32 替代手动导入 Win32 API。
+    - 使用 Partial Property 替代 Field，优化 CommunityToolkit.Mvvm 的 ObservableObjectAttribute 效果。
+    - 显式声明受支持的系统版本，完全放弃对Windows 11 以前全部系统的支持：
+        - TargetFramework: net10.0-windows10.0.26100.0
+        - SupportedOSPlatformVersion: 10.0.22000.0
 
 ## 许可
 [MIT](LICENSE)
