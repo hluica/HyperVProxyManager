@@ -13,10 +13,10 @@ public partial class MainWindowViewModel : ObservableObject, IRecipient<Navigati
     private readonly IServiceProvider _serviceProvider;
 
     [ObservableProperty]
-    private object? _currentView;
+    public partial object? CurrentView { get; set; }
 
     [ObservableProperty]
-    private bool _isSettingsButtonVisible = true;
+    public partial bool IsSettingsButtonVisible { get; set; } = true;
 
     public MainWindowViewModel(IServiceProvider serviceProvider)
     {

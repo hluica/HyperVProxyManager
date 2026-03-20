@@ -26,7 +26,7 @@ public partial class TrayViewModel : ObservableObject
         _serviceProvider = serviceProvider;
 
         // 监听 Store 变化更新 UI
-        _store.PropertyChanged += (s, e) =>
+        _store.PropertyChanged += (_, _) =>
         {
             OnPropertyChanged(nameof(IsProxyEnabled));
             OnPropertyChanged(nameof(CanQuickSet));

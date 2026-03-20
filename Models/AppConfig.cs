@@ -7,10 +7,10 @@ public partial class AppConfig : ObservableObject
     public const int DEFAULT_PORT = 7890;
 
     [ObservableProperty]
-    private bool _useExternalConfig = false;
+    public partial bool UseExternalConfig { get; set; } = false;
 
     [ObservableProperty]
-    private int _proxyPort = DEFAULT_PORT;
+    public partial int ProxyPort { get; set; } = DEFAULT_PORT;
 
     partial void OnUseExternalConfigChanged(bool value)
     {

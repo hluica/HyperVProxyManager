@@ -2,8 +2,8 @@
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 
-using HyperVProxyManager.Utils;
 using HyperVProxyManager.Services.Interfaces;
+using HyperVProxyManager.Utils;
 
 namespace HyperVProxyManager.ViewModels;
 
@@ -14,7 +14,7 @@ public partial class SettingsViewModel : ObservableObject
     public SettingsViewModel(ISettingsService settingsService)
     {
         _settingsService = settingsService;
-        _settingsService.Config.PropertyChanged += (s, e)
+        _settingsService.Config.PropertyChanged += (_, e)
             => OnPropertyChanged(e.PropertyName);
     }
 

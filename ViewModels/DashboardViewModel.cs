@@ -20,7 +20,7 @@ public partial class DashboardViewModel : ObservableObject
         _proxyService = proxyService;
         _settingsService = settingsService;
 
-        _store.PropertyChanged += (s, e) =>
+        _store.PropertyChanged += (_, _) =>
         {
             OnPropertyChanged(nameof(HostIpAddress));
             OnPropertyChanged(nameof(IsProxyEnabled));
@@ -28,12 +28,12 @@ public partial class DashboardViewModel : ObservableObject
             OnPropertyChanged(nameof(CurrentProxyAddress));
         };
 
-        _settingsService.Config.PropertyChanged += (s, e) =>
+        _settingsService.Config.PropertyChanged += (_, _) =>
             OnPropertyChanged(nameof(TargetPort));
     }
 
     [ObservableProperty]
-    private string _statusMessage = "就绪";
+    public partial string StatusMessage { get; set; } = "就绪";
 
     public string HostIpAddress
         => _store.HostIpAddress;
