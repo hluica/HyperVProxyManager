@@ -43,6 +43,8 @@
     - 默认配置被硬编码于程序之中，当外部配置文件缺失或配置项不合法时，将使用默认配置。
     - 程序退出时，会将当前配置保存到外部配置文件中，并覆盖原有配置文件的所有内容。
     - 读取和保存配置时的任何错误都会被忽略，目标是优先保证程序的正确运行。
+- Win32 互操作
+    - 使用 [CsWin32](https://github.com/microsoft/CsWin32) 将 Win32 API 投影为 C# 方法。
 
 ## 注意事项
 
@@ -83,7 +85,7 @@
     - Microsoft.Extensions.DependencyInjection: 10.0.1 -> 10.0.2。
 
 > [!Warning]
-> 由于未确认的 WPF-UI 的 Bug，其更新到 4.2.0 版本后将无法启用跟随系统颜色主题的功能。
+> 由于未确认的 WPF-UI 的 Bug，v1.4.4 版本开始将无法跟随系统主题更改程序主题。
 
 - v1.5.0 增加外部配置和设置页面，允许用户自定义代理服务器端口。
 - v1.5.1 更改外部配置文件的定位方法，解决单文件打包时配置文件被生成在%Temp%目录下的问题。
@@ -102,6 +104,9 @@
     - 使用 CsWin32 替代手动导入 Win32 API。
     - 使用 Partial Property 替代 Field，优化 CommunityToolkit.Mvvm 的 ObservableObjectAttribute 效果。
     - 对特定 Win32 API 抑制平台兼容性检查。
+- v1.6.1
+    - 优化服务层代码，改进代理配置服务。
+    - 优化 Dashboard ViewModel，为状态信息显示增加自动恢复初始状态的功能，并修复了不同操作之间相互干扰的问题。
 
 ## 许可
 [MIT](LICENSE)

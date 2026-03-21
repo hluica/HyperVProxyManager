@@ -11,6 +11,8 @@ public partial class DashboardViewModel : ObservableObject
     private readonly IProxyService _proxyService;
     private readonly ISettingsService _settingsService;
 
+    private CancellationTokenSource? _statusMessageCts;
+
     public DashboardViewModel(
         IProxyStateStore store,
         IProxyService proxyService,
@@ -54,6 +56,27 @@ public partial class DashboardViewModel : ObservableObject
     public int TargetPort
         => _settingsService.Config.ProxyPort;
 
+    // 辅助方法：获取新的取消令牌，并自动取消上一次未完成的延时任务
+    private CancellationToken GetNewStatusToken()
+    {
+        _statusMessageCts?.Cancel();
+        _statusMessageCts?.Dispose();
+        _statusMessageCts = new CancellationTokenSource();
+        return _statusMessageCts.Token;
+    }
+
+    // 公共辅助方法：等待两秒后将状态恢复为“就绪”
+    private async Task DelayAndResetStatusAsync(CancellationToken token)
+    {
+        try
+        {
+            await Task.Delay(2000, token);
+            StatusMessage = "就绪";
+        }
+        catch (OperationCanceledException)
+        { /* 被其他方法打断，静默处理，什么都不做 */ }
+    }
+
     [RelayCommand]
     private async Task OnLoaded()
         => await _store.RefreshAsync();
@@ -61,10 +84,16 @@ public partial class DashboardViewModel : ObservableObject
     [RelayCommand]
     private async Task OnRefresh()
     {
+        var token = GetNewStatusToken();
+
         StatusMessage = "正在刷新...";
         await _store.RefreshAsync();
+        if (token.IsCancellationRequested)
+            return;
+
         StatusMessage = "刷新完成";
         OnPropertyChanged(nameof(CanQuickSet));
+        await DelayAndResetStatusAsync(token);
     }
 
     [RelayCommand]
@@ -73,6 +102,8 @@ public partial class DashboardViewModel : ObservableObject
         if (!CanQuickSet)
             return;
 
+        var token = GetNewStatusToken();
+
         // 使用 SettingsService 中的端口配置
         string targetProxy = $"{HostIpAddress}:{TargetPort}";
 
@@ -80,16 +111,28 @@ public partial class DashboardViewModel : ObservableObject
         StatusMessage = result.Message;
 
         if (result.IsSuccess)
+        {
             await _store.RefreshAsync();
+            if (token.IsCancellationRequested)
+                return;
+            await DelayAndResetStatusAsync(token);
+        }
     }
 
     [RelayCommand]
     private async Task OnDisableProxy()
     {
+        var token = GetNewStatusToken();
+
         var result = _proxyService.DisableSystemProxy();
         StatusMessage = result.Message;
 
         if (result.IsSuccess)
+        {
             await _store.RefreshAsync();
+            if (token.IsCancellationRequested)
+                return;
+            await DelayAndResetStatusAsync(token);
+        }
     }
 }

@@ -57,38 +57,31 @@ public class ProxyService : IProxyService
             key.SetValue("ProxyServer", enable ? address : "", RegistryValueKind.String);
 
             // 刷新系统设置并收取返回值
-            bool result1;
-            bool result2;
+            bool result1, result2;
+            int error1 = 0, error2 = 0;
 
             unsafe
             {
-                // default 作为 HINTERNET 句柄
-                // null 作为 void* 缓冲区指针
-                result1 = PInvoke.InternetSetOption(
-                    default,
-                    PInvoke.INTERNET_OPTION_SETTINGS_CHANGED,
-                    null,
-                    0);
+                // default 作为 HINTERNET 句柄；null 作为 void* 缓冲区指针
+                // INTERNET_OPTION_SETTINGS_CHANGED - 通知系统注册表配置已更改
+                result1 = PInvoke.InternetSetOption(default, PInvoke.INTERNET_OPTION_SETTINGS_CHANGED, null, 0);
+                if (!result1)
+                    error1 = Marshal.GetLastPInvokeError();
 
-                result2 = PInvoke.InternetSetOption(
-                    default,
-                    PInvoke.INTERNET_OPTION_REFRESH,
-                    null,
-                    0);
+                // INTERNET_OPTION_REFRESH - 立即刷新代理设置
+                result2 = PInvoke.InternetSetOption(default, PInvoke.INTERNET_OPTION_REFRESH, null, 0);
+                if (!result2)
+                    error2 = Marshal.GetLastPInvokeError();
             }
 
-            if (result1 == false || result2 == false)
+            return (result1, result2, enable) switch
             {
-                // 获取具体的 Win32 错误代码
-                int errorCode = Marshal.GetLastPInvokeError();
-                return new OperationResult(false, $"警告：Win32 操作异常，最后返回值 - {errorCode}");
-            }
-
-            string successMsg = enable
-                ? $"操作完成：设置代理为 {address}"
-                : "操作完成：禁用系统代理";
-
-            return new OperationResult(true, successMsg);
+                (true, true, true) => new OperationResult(true, $"操作完成：设置代理为 {address}"),
+                (true, true, false) => new OperationResult(true, "操作完成：禁用系统代理"),
+                (false, true, _) => new OperationResult(false, $"警告：通知系统设置更新失败。错误代码: {error1}"),
+                (true, false, _) => new OperationResult(false, $"警告：刷新代理设置失败。错误代码: {error2}"),
+                (false, false, _) => new OperationResult(false, $"警告：操作完全失败。更新设置错误代码: {error1}，刷新代理错误代码: {error2}")
+            };
         }
         catch (UnauthorizedAccessException)
         {
