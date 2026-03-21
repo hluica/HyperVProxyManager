@@ -88,11 +88,11 @@ public partial class DashboardViewModel : ObservableObject
 
         StatusMessage = "正在刷新...";
         await _store.RefreshAsync();
-        if (token.IsCancellationRequested)
-            return;
-
         StatusMessage = "刷新完成";
         OnPropertyChanged(nameof(CanQuickSet));
+
+        if (token.IsCancellationRequested)
+            return;
         await DelayAndResetStatusAsync(token);
     }
 
