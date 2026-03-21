@@ -1,5 +1,8 @@
 ﻿# HyperVProxyManager
 
+![GitHub Release](https://img.shields.io/github/v/release/hluica/HyperVProxyManager)
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/hluica/HyperVProxyManager)
+
 轻量 GUI 工具，用于在 Hyper-V 虚拟机中管理代理设置。特点：
 
 - 单文件发布，便于分发和使用。
