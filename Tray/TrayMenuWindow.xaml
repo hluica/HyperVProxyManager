@@ -5,6 +5,7 @@
     xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     Width="220"
+    Background="Transparent"
     ResizeMode="NoResize"
     ShowInTaskbar="False"
     SizeToContent="Height"
@@ -19,7 +20,7 @@
         <WindowChrome
             CaptionHeight="0"
             CornerRadius="0"
-            GlassFrameThickness="1"
+            GlassFrameThickness="-1"
             ResizeBorderThickness="0"
             UseAeroCaptionButtons="False" />
     </WindowChrome.WindowChrome>
@@ -30,10 +31,12 @@
         </behaviors:EventTrigger>
     </behaviors:Interaction.Triggers>
 
-    <Border Background="{ui:ThemeResource SolidBackgroundFillColorBaseBrush}">
+    <Border Background="Transparent">
         <StackPanel Margin="4">
             <!--  状态信息区  -->
-            <ui:Card VerticalAlignment="Stretch">
+            <ui:Card
+                VerticalAlignment="Stretch"
+                Background="{ui:ThemeResource CardBackgroundFillColorSecondaryBrush}">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto" />

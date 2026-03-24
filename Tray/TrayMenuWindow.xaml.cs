@@ -11,6 +11,7 @@ using Windows.Win32.UI.HiDpi;
 using Windows.Win32.UI.WindowsAndMessaging;
 
 using Wpf.Ui.Appearance;
+using Wpf.Ui.Controls;
 
 namespace HyperVProxyManager.Tray;
 
@@ -25,6 +26,13 @@ public partial class TrayMenuWindow : Window
 
         // 订阅 Deactivated 事件：失去焦点时隐藏窗口
         Deactivated += (_, _) => Hide();
+    }
+
+    protected override void OnSourceInitialized(EventArgs e)
+    {
+        base.OnSourceInitialized(e);
+
+        _ = WindowBackdrop.ApplyBackdrop(this, WindowBackdropType.Acrylic);
     }
 
     public void ShowAtCursor()
