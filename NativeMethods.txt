@@ -5,10 +5,13 @@ InternetSetOptionW
 
 // User32
 GetCursorPos
-MonitorFromPoint
 GetMonitorInfo
+GetWindowLong
+MonitorFromPoint
 SetForegroundWindow
+SetWindowLong
 SetWindowPos
+WINDOW_STYLE
 
 // SHCore
 GetDpiForMonitor

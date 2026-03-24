@@ -32,6 +32,13 @@ public partial class TrayMenuWindow : Window
     {
         base.OnSourceInitialized(e);
 
+        // 移除系统菜单
+        var hwnd = new HWND(new WindowInteropHelper(this).Handle);
+        int style = PInvoke.GetWindowLong(hwnd, WINDOW_LONG_PTR_INDEX.GWL_STYLE);
+        uint newStyle = (uint)style & ~(uint)WINDOW_STYLE.WS_SYSMENU;
+        _ = PInvoke.SetWindowLong(hwnd, WINDOW_LONG_PTR_INDEX.GWL_STYLE, (int)newStyle);
+
+        // 应用半透明 backdrop 效果
         _ = WindowBackdrop.ApplyBackdrop(this, WindowBackdropType.Acrylic);
     }
 
@@ -124,14 +131,20 @@ public partial class TrayMenuWindow : Window
         // 8. 使用 SetWindowPos 进行原子化移动
         var helper = new WindowInteropHelper(this);
 
+        // hWndInsertAfter: new HWND(0) 表示放在 Z 序的顶部（不改变其他窗口的 Z 序关系）
+        // cx: 0, cy: 0 表示不改变窗口大小（因为设置了 SWP_NOSIZE）
+        // uFlags += SET_WINDOW_POS_FLAGS.SWP_FRAMECHANGED 表示强制 Windows 重新计算窗口的非客户区，
+        //   因为此前在 OnSourceInitialized 中执行了修改。
         _ = PInvoke.SetWindowPos(
             new HWND(helper.Handle),
-            new HWND(0), // Z序：放在顶部
+            new HWND(0),
             targetLeft,
             targetTop,
-            0, 0, // 忽略宽高设置，因为设置了 SWP_NOSIZE
-            SET_WINDOW_POS_FLAGS.SWP_NOSIZE | SET_WINDOW_POS_FLAGS.SWP_NOACTIVATE | SET_WINDOW_POS_FLAGS.SWP_NOZORDER
-        );
+            0, 0,
+            SET_WINDOW_POS_FLAGS.SWP_NOSIZE
+            | SET_WINDOW_POS_FLAGS.SWP_NOACTIVATE
+            | SET_WINDOW_POS_FLAGS.SWP_NOZORDER
+            | SET_WINDOW_POS_FLAGS.SWP_FRAMECHANGED);
 
         // 9. 显形与激活
         // 位置已经对齐，现在显示出来，视觉上不会有跳动
