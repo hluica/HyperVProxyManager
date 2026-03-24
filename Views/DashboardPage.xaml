@@ -40,7 +40,8 @@
             <ui:Card
                 Grid.Row="0"
                 Grid.Column="0"
-                VerticalAlignment="Stretch">
+                VerticalAlignment="Stretch"
+                Background="{ui:ThemeResource CardBackgroundFillColorSecondaryBrush}">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
@@ -97,7 +98,8 @@
             <ui:Card
                 Grid.Row="0"
                 Grid.Column="2"
-                VerticalAlignment="Stretch">
+                VerticalAlignment="Stretch"
+                Background="{ui:ThemeResource CardBackgroundFillColorSecondaryBrush}">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />

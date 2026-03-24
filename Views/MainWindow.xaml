@@ -15,7 +15,7 @@
     ResizeMode="CanResize"
     SnapsToDevicePixels="True"
     UseLayoutRounding="True"
-    WindowBackdropType="Mica"
+    WindowBackdropType="Acrylic"
     WindowStartupLocation="CenterScreen">
 
     <ui:FluentWindow.Resources>

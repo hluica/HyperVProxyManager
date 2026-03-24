@@ -17,7 +17,7 @@
             Margin="0,0,0,24"
             Orientation="Horizontal">
             <ui:Button
-                Appearance="Secondary"
+                Appearance="Transparent"
                 Command="{Binding GoBackCommand}"
                 Icon="{ui:SymbolIcon ArrowLeft24}" />
 
@@ -31,10 +31,11 @@
 
         <StackPanel Grid.Row="1">
             <!--  设置卡片  -->
-            <ui:CardExpander
-                HorizontalAlignment="Stretch"
-                IsExpanded="True">
-                <ui:CardExpander.Header>
+            <StackPanel HorizontalAlignment="Stretch">
+                <ui:Card
+                    Margin="0,-1,0,0"
+                    Padding="12"
+                    Background="{ui:ThemeResource CardBackgroundFillColorSecondaryBrush}">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
@@ -55,39 +56,43 @@
                                 Text="是否从外部 config.ini 读取代理端口配置" />
                         </StackPanel>
 
-                        <!--  Header 开关  -->
                         <ui:ToggleSwitch
                             Grid.Column="1"
                             IsChecked="{Binding UseExternalConfig, Mode=TwoWay}" />
                     </Grid>
-                </ui:CardExpander.Header>
 
-                <!--  Content: 端口设置  -->
-                <Grid Margin="0,8,0,0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="150" />
-                    </Grid.ColumnDefinitions>
+                </ui:Card>
 
-                    <StackPanel
-                        Grid.Column="0"
-                        VerticalAlignment="Center">
-                        <TextBlock Text="代理端口" />
+                <ui:Card
+                    Margin="0,-1,0,0"
+                    Padding="12"
+                    Background="{ui:ThemeResource CardBackgroundFillColorSecondaryBrush}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="150" />
+                        </Grid.ColumnDefinitions>
 
-                        <TextBlock
-                            FontSize="12"
-                            Foreground="{ui:ThemeResource TextFillColorSecondaryBrush}"
-                            Text="指定宿主机代理软件监听的端口 (1-65535)" />
-                    </StackPanel>
+                        <StackPanel
+                            Grid.Column="0"
+                            VerticalAlignment="Center">
+                            <TextBlock Text="代理端口" />
 
-                    <ui:NumberBox
-                        Grid.Column="1"
-                        IsEnabled="{Binding UseExternalConfig}"
-                        Maximum="65535"
-                        Minimum="1"
-                        Value="{Binding ProxyPort, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                </Grid>
-            </ui:CardExpander>
+                            <TextBlock
+                                FontSize="12"
+                                Foreground="{ui:ThemeResource TextFillColorSecondaryBrush}"
+                                Text="指定宿主机代理软件监听的端口 (1-65535)" />
+                        </StackPanel>
+
+                        <ui:NumberBox
+                            Grid.Column="1"
+                            IsEnabled="{Binding UseExternalConfig}"
+                            Maximum="65535"
+                            Minimum="1"
+                            Value="{Binding ProxyPort, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    </Grid>
+                </ui:Card>
+            </StackPanel>
         </StackPanel>
     </Grid>
 </UserControl>
