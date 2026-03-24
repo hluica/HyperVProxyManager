@@ -7,8 +7,8 @@
 
 - 单文件发布，便于分发和使用。
 - 充分简化代理设置方式，只包含“设置”与“禁用”两个功能。
-- 通过 [WPF-UI](https://wpfui.lepo.co/) 实现现代化的界面，支持 Mica 背景和颜色模式切换。
-- 使用自绘 UI 实现现代化的系统托盘菜单，支持颜色模式切换。
+- 通过 [WPF-UI](https://wpfui.lepo.co/) 实现现代化的界面，支持半透明背景和颜色模式切换。
+- 使用自绘 UI 实现现代化的系统托盘菜单，支持半透明背景和颜色模式切换。
 - 提供少量外部配置，增加适用性。
 
 
@@ -20,13 +20,13 @@
 
 系统托盘菜单（深色模式）截图：
 
-![系统托盘菜单（深色模式）截图](Readme.md.Assets/screenshot2.png)
+![系统托盘菜单（深色模式）截图](Readme.md.Assets/screenshot3.png)
 
 两张截图均在非 Hyper-V 虚拟机下获取，因此无法呈现代理设置功能。
 
 设置界面（浅色模式）截图：
 
-![设置界面（浅色模式）截图](Readme.md.Assets/screenshot3.png)
+![设置界面（浅色模式）截图](Readme.md.Assets/screenshot2.png)
 
 ## 工作细节
 
@@ -36,7 +36,7 @@
     - 当宿主机的代理提供程序支持局域网连接时，虚拟机可以设置其代理服务器为宿主机的虚拟局域网地址，从而实现代理功能。
     - 本工具通过修改注册表来设置或禁用代理，通过 `wininet.dll` 的 [InternetSetOptionW](https://learn.microsoft.com/en-us/windows/win32/api/wininet/nf-wininet-internetsetoptionw) 函数通知系统代理设置更改。
  - UI 绘制
-    - 主界面继承自 `Wpf.Ui.Controls.FluentWindow` 类，原生支持 Mica 效果和 WinUI 3 风格 UI 控件；通过将窗口扩展至标题栏，实现对标题栏的完全自定义。
+    - 主界面继承自 `Wpf.Ui.Controls.FluentWindow` 类，原生支持半透明 backdrop 效果和 WinUI 3 风格 UI 控件；通过将窗口扩展至标题栏，实现对标题栏的完全自定义。
     - 系统托盘图标继承自 `Hardcodet.Wpf.TaskbarNotification.TaskbarIcon` 类，但仅用于控制图标的表现
     - 实际托盘菜单为自定义窗口，通过继承 `System.Windows.Window` 类并使用 WPF-UI 控件，实现现代化且生命周期独立的菜单窗口。其目的是使托盘菜单和主界面的生命周期解耦，在后台启动时托盘菜单可以独立运行。
         - 通过组合使用 `SingleBorderWindow` 的窗口设置和 `WindowChrome` 类，将窗口控件完全隐藏的同时保留阴影效果；
@@ -54,8 +54,14 @@
 - 仅支持 IPv4，不支持 IPv6。
 - 本工具虽为单文件发布，但未包含运行时，需自行安装 .NET 10 桌面运行时。
 
-> [!Warning]
-> 可能由于使用了 WPF-UI 并通过它开启了 Mica 效果，本程序已验证无法在 Windows 10 上运行。
+### 已知问题
+
+- 由于使用了 WPF-UI 并通过它开启了半透明 backdrop 效果，本程序已验证无法在 Windows 10 21H2上运行。其他 Windows 版本尚未验证。
+    - 解决方法：无。
+- 由于未确认的 WPF-UI 的 Bug，v1.4.4 版本开始将无法跟随系统主题更改程序主题。
+    - 解决方法：在系统主题更改后，手动退出程序并重新启动
+- 如果使用 [Mica for Everyone](https://github.com/MicaForEveryone/MicaForEveryone) 覆盖本程序的窗口 backdrop 效果，则可能导致托盘菜单右上角显示不可点击的关闭按钮。
+    - 解决方法：为本程序创建单独的规则，配置 backdrop type 为 Default。
 
 ## 程序构建
 
@@ -86,12 +92,8 @@
 - v1.4.4 更新依赖。
     - WPF-UI: 4.1.0 -> 4.2.0；
     - Microsoft.Extensions.DependencyInjection: 10.0.1 -> 10.0.2。
-
-> [!Warning]
-> 由于未确认的 WPF-UI 的 Bug，v1.4.4 版本开始将无法跟随系统主题更改程序主题。
-
 - v1.5.0 增加外部配置和设置页面，允许用户自定义代理服务器端口。
-- v1.5.1 更改外部配置文件的定位方法，解决单文件打包时配置文件被生成在%Temp%目录下的问题。
+- v1.5.1 更改外部配置文件的定位方法，解决单文件打包时配置文件被生成在 `%Temp%` 目录下的问题。
 - v1.5.2 更新依赖
     - Microsoft.Extensions.Configuration.Ini: 10.0.2 -> 10.0.3；
     - Microsoft.Extensions.DependencyInjection: 10.0.2 -> 10.0.3。
@@ -110,6 +112,10 @@
 - v1.6.1
     - 优化服务层代码，改进代理配置服务。
     - 优化 Dashboard ViewModel，为状态信息显示增加自动恢复初始状态的功能，并修复了不同操作之间相互干扰的问题。
+- v1.7.0
+    - 更改程序主界面半透明 backdrop 效果类型：由 Mica 变更为 Acrylic。
+    - 为系统托盘上下文菜单窗口增加半透明 backdrop 效果：Acrylic。
+    - 更改程序界面中部分 UI 组件的背景效果与样式，以和新的 backdrop 效果相匹配。
 
 ## 许可
 [MIT](LICENSE)
