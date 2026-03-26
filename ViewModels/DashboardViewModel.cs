@@ -35,7 +35,7 @@ public partial class DashboardViewModel : ObservableObject
     }
 
     [ObservableProperty]
-    public partial string StatusMessage { get; set; } = "就绪";
+    public partial string StatusMessage { get; set; } = l10n.StatusMessageDefault;
 
     public string HostIpAddress
         => _store.HostIpAddress;
@@ -44,14 +44,14 @@ public partial class DashboardViewModel : ObservableObject
         => _store.CurrentProxy.IsEnabled;
 
     public bool CanQuickSet
-        => !HostIpAddress.Contains("未检测")
-        && !HostIpAddress.Contains("正在检测")
+        => !HostIpAddress.Contains(l10n.HostIpAddressNotDetected)
+        && !HostIpAddress.Contains(l10n.HostIpAddressDetecting)
         && !IsProxyEnabled;
 
     public string CurrentProxyAddress
         => _store.CurrentProxy.IsEnabled
             ? _store.CurrentProxy.ServerAddress
-            : "未启用";
+            : l10n.CurrentProxyNotEnable;
 
     public int TargetPort
         => _settingsService.Config.ProxyPort;
@@ -71,7 +71,7 @@ public partial class DashboardViewModel : ObservableObject
         try
         {
             await Task.Delay(2000, token);
-            StatusMessage = "就绪";
+            StatusMessage = l10n.StatusMessageDefault;
         }
         catch (OperationCanceledException)
         { /* 被其他方法打断，静默处理，什么都不做 */ }
@@ -86,9 +86,9 @@ public partial class DashboardViewModel : ObservableObject
     {
         var token = GetNewStatusToken();
 
-        StatusMessage = "正在刷新...";
+        StatusMessage = l10n.StatusMessageRefreshing;
         await _store.RefreshAsync();
-        StatusMessage = "刷新完成";
+        StatusMessage = l10n.StatusMessageRefreshed;
         OnPropertyChanged(nameof(CanQuickSet));
 
         if (token.IsCancellationRequested)

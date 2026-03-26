@@ -40,14 +40,14 @@ public partial class TrayViewModel : ObservableObject
         => _store.CurrentProxy.IsEnabled;
 
     public bool CanQuickSet
-        => !HostIpAddress.Contains("未检测")
-        && !HostIpAddress.Contains("正在检测")
+        => !HostIpAddress.Contains(l10n.HostIpAddressNotDetected)
+        && !HostIpAddress.Contains(l10n.HostIpAddressDetecting)
         && !IsProxyEnabled;
 
     public string ProxyStatusText
         => _store.CurrentProxy.IsEnabled
             ? $"{_store.CurrentProxy.ServerAddress}"
-            : "系统代理已禁用";
+            : l10n.CurrentProxyDisabled;
 
     [RelayCommand]
     private async Task OnMenuLoaded()

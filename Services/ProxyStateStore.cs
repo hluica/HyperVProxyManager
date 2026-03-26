@@ -14,7 +14,7 @@ public partial class ProxyStateStore(
     private readonly IProxyService _proxyService = proxyService;
 
     [ObservableProperty]
-    public partial string HostIpAddress { get; set; } = "正在检测...";
+    public partial string HostIpAddress { get; set; } = l10n.HostIpAddressDetecting;
 
     [ObservableProperty]
     public partial ProxyState CurrentProxy { get; set; } = ProxyState.Empty;
@@ -35,7 +35,7 @@ public partial class ProxyStateStore(
 
             string? ip = await ipTask;
 
-            HostIpAddress = string.IsNullOrEmpty(ip) ? "未检测到虚拟机网关" : ip;
+            HostIpAddress = string.IsNullOrEmpty(ip) ? l10n.HostIpAddressNotDetected : ip;
             CurrentProxy = proxyState;
         }
         finally

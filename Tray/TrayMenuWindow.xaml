@@ -3,6 +3,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
+    xmlns:p="clr-namespace:HyperVProxyManager.Resources"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     Width="220"
     Background="Transparent"
@@ -83,11 +84,11 @@
                 HorizontalContentAlignment="Left"
                 Appearance="Transparent"
                 Command="{Binding QuickSetCommand}"
+                Content="{x:Static p:l10n.TrayQuickSet}"
                 IsEnabled="{Binding CanQuickSet}">
                 <ui:Button.Icon>
                     <ui:SymbolIcon Symbol="Rocket24" />
                 </ui:Button.Icon>
-                快速应用
             </ui:Button>
 
             <ui:Button
@@ -96,11 +97,11 @@
                 HorizontalContentAlignment="Left"
                 Appearance="Transparent"
                 Command="{Binding DisableProxyCommand}"
+                Content="{x:Static p:l10n.TrayDisableProxy}"
                 IsEnabled="{Binding IsProxyEnabled}">
                 <ui:Button.Icon>
                     <ui:SymbolIcon Symbol="DismissCircle24" />
                 </ui:Button.Icon>
-                禁用代理
             </ui:Button>
 
             <Separator
@@ -113,11 +114,11 @@
                 HorizontalAlignment="Stretch"
                 HorizontalContentAlignment="Left"
                 Appearance="Transparent"
-                Command="{Binding ShowMainWindowCommand}">
+                Command="{Binding ShowMainWindowCommand}"
+                Content="{x:Static p:l10n.TrayShowMainWindow}">
                 <ui:Button.Icon>
                     <ui:SymbolIcon Symbol="Window24" />
                 </ui:Button.Icon>
-                打开主界面
             </ui:Button>
 
             <ui:Button
@@ -125,11 +126,11 @@
                 HorizontalAlignment="Stretch"
                 HorizontalContentAlignment="Left"
                 Appearance="Transparent"
-                Command="{Binding ExitCommand}">
+                Command="{Binding ExitCommand}"
+                Content="{x:Static p:l10n.TrayExit}">
                 <ui:Button.Icon>
                     <ui:SymbolIcon Symbol="Power24" />
                 </ui:Button.Icon>
-                退出程序
             </ui:Button>
         </StackPanel>
     </Border>

@@ -30,7 +30,7 @@ public class ProxyService : IProxyService
             return new ProxyState
             {
                 IsEnabled = enabled == 1,
-                ServerAddress = string.IsNullOrEmpty(server) ? "未设置" : server
+                ServerAddress = string.IsNullOrEmpty(server) ? l10n.ProxyNotSet : server
             };
         }
         catch
@@ -51,7 +51,7 @@ public class ProxyService : IProxyService
         {
             using var key = Registry.CurrentUser.CreateSubKey(REGISTRY_KEY_PATH);
             if (key == null)
-                return new OperationResult(false, "无法创建或打开注册表项");
+                return new OperationResult(false, l10n.ResultErrOpenRegisty);
 
             key.SetValue("ProxyEnable", enable ? 1 : 0, RegistryValueKind.DWord);
             key.SetValue("ProxyServer", enable ? address : "", RegistryValueKind.String);
@@ -76,25 +76,25 @@ public class ProxyService : IProxyService
 
             return (result1, result2, enable) switch
             {
-                (true, true, true) => new OperationResult(true, $"操作完成：设置代理为 {address}"),
-                (true, true, false) => new OperationResult(true, "操作完成：禁用系统代理"),
-                (false, true, _) => new OperationResult(false, $"警告：通知系统设置更新失败。错误代码: {error1}"),
-                (true, false, _) => new OperationResult(false, $"警告：刷新代理设置失败。错误代码: {error2}"),
-                (false, false, _) => new OperationResult(false, $"警告：操作完全失败。更新设置错误代码: {error1}，刷新代理错误代码: {error2}")
+                (true, true, true) => new OperationResult(true, string.Format(l10n.ResultSccEnable, address)),
+                (true, true, false) => new OperationResult(true, l10n.ResultSccDisable),
+                (false, true, _) => new OperationResult(false, string.Format(l10n.ResultErrSettingChanged, error1)),
+                (true, false, _) => new OperationResult(false, string.Format(l10n.ResultErrRefresh, error2)),
+                (false, false, _) => new OperationResult(false, string.Format(l10n.ResultErrBoth, error1, error2))
             };
         }
         catch (UnauthorizedAccessException)
         {
-            return new OperationResult(false, "错误：权限不足。请尝试以管理员身份运行程序。");
+            return new OperationResult(false, l10n.ResultErrUnauthorized);
         }
         catch (SecurityException)
         {
-            return new OperationResult(false, "错误：安全异常，无法访问注册表。");
+            return new OperationResult(false, l10n.ResultErrSecurity);
         }
         catch (Exception ex)
         {
             // 捕获所有其他未知错误，并包含异常信息以便调试
-            return new OperationResult(false, $"错误：未预期的异常 - {ex.Message}");
+            return new OperationResult(false, string.Format(l10n.ResultErrUnexpected, ex.Message));
         }
     }
 }

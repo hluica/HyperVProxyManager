@@ -8,5 +8,5 @@ public record ProxyState
         = string.Empty;
 
     public static ProxyState Empty
-        => new() { IsEnabled = false, ServerAddress = "未设置" };
+        => new() { IsEnabled = false, ServerAddress = l10n.ProxyNotSet };
 }

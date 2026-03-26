@@ -1,4 +1,7 @@
-﻿using System.Windows;
+﻿global using HyperVProxyManager.Resources;
+
+using System.Globalization;
+using System.Windows;
 
 using HyperVProxyManager.Services;
 using HyperVProxyManager.Services.Interfaces;
@@ -22,6 +25,13 @@ public partial class App : Application
 
     protected override void OnStartup(StartupEventArgs e)
     {
+        // 配置 i18n 和 l10n
+        var currentCulture = CultureInfo.CurrentUICulture;
+        Thread.CurrentThread.CurrentCulture = currentCulture;
+        Thread.CurrentThread.CurrentUICulture = currentCulture;
+        CultureInfo.DefaultThreadCurrentCulture = currentCulture;
+        CultureInfo.DefaultThreadCurrentUICulture = currentCulture;
+
         if (!TryAcquireSingleton())
         {
             NotifyExistingInstance();

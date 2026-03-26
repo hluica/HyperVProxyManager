@@ -3,6 +3,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
+    xmlns:p="clr-namespace:HyperVProxyManager.Resources"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     xmlns:viewmodels="clr-namespace:HyperVProxyManager.ViewModels">
 
@@ -60,7 +61,7 @@
                         Grid.Row="1"
                         Margin="0,12,0,4"
                         Foreground="{ui:ThemeResource TextFillColorSecondaryBrush}"
-                        Text="宿主机 IPv4" />
+                        Text="{x:Static p:l10n.DashCardHost}" />
 
                     <Grid
                         Grid.Row="2"
@@ -139,7 +140,7 @@
                         Grid.Row="1"
                         Margin="0,12,0,4"
                         Foreground="{ui:ThemeResource TextFillColorSecondaryBrush}"
-                        Text="当前系统代理" />
+                        Text="{x:Static p:l10n.DashCardProxy}" />
 
                     <Grid
                         Grid.Row="2"
@@ -199,7 +200,7 @@
                         Margin="10,0,0,0"
                         VerticalAlignment="Center"
                         FontSize="14">
-                        <Run Text="应用宿主机 IP" />
+                        <Run Text="{x:Static p:l10n.DashButtonQuickSet}" />
                         <Run Text=" (" />
                         <Run Text="{Binding TargetPort, Mode=OneWay}" />
                         <Run Text=")" />
@@ -237,7 +238,7 @@
                             Grid.Column="1"
                             Margin="8,0,0,0"
                             VerticalAlignment="Center"
-                            Text="刷新" />
+                            Text="{x:Static p:l10n.DashButtonRefresh}" />
                     </Grid>
                 </ui:Button>
 
@@ -263,7 +264,7 @@
                             Grid.Column="1"
                             Margin="8,0,0,0"
                             VerticalAlignment="Center"
-                            Text="禁用" />
+                            Text="{x:Static p:l10n.DashButtonDisable}" />
                     </Grid>
                 </ui:Button>
             </Grid>
