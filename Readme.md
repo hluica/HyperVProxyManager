@@ -1,5 +1,7 @@
 ﻿# HyperVProxyManager
 
+[![.NET 10.0](https://img.shields.io/badge/.NET-10.0-512BD4)](https://dotnet.microsoft.com/en-us/download/dotnet/10.0)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![GitHub Release](https://img.shields.io/github/v/release/hluica/HyperVProxyManager)](https://github.com/hluica/HyperVProxyManager/releases/latest)
 [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/hluica/HyperVProxyManager)
 
